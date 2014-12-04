@@ -1,0 +1,246 @@
+#%RAML 0.8
+---
+title: API Resource Example
+baseUri: https://localhost/api/{version}
+version: v1
+protocols: [HTTPS]
+mediaType: application/json
+
+traits:
+  - private: !include _traits/private.raml
+/users:
+  description: This is user resource.
+  get:
+    is: [private]
+    description: Retrieve all user
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {[{"id":"1", "name":"me", "password":"1234", "organisation":"1"}, {"id":"2", "name":"you", "password":"4567", "organisation":"2"}]}
+  /{id}:
+    get:
+      description: Retrieve a user by his id
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+               {"id":"1", "name":"me", "password":"1234"}
+        404:
+          description: The resource was not found.
+/sensors:
+  description: This is a sensor resource
+  get:
+    description: Retrieve all public sensor
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {[{"id":"1", "name":"temperature sensor", "description":"ROOM_1", "type":"TEMPERATURE", "public":"true"},{"id":"2", "name":"temperature sensor", "description":"ROOM_2", "type":"TEMPERATURE", "public":"true"}]}
+  /{id}:
+    get:
+      description: Retrieve all public sensor
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {"id":"1", "name":"temperature sensor", "description":"ROOM_1", "type":"TEMPERATURE", "public":"true"}}
+    /observations:
+      get:
+        description: |
+          Retrieve the last 1000 observations of a sensor
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  {[{"id":"1", "value":"21.2", "timestamp":"1417036680"}, {"id":"2", "value":"22.1", "timestamp":"141703680"}
+      post:
+        is: [private]
+        description: |
+          Create a new observation
+        body:
+          application/json:
+            example: |
+              {"value":"21.2, "timestamp":"1417036680"}
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  {"id":"1", "value":"21.2, "timestamp":"1417036680"}
+/organisations:
+  get:
+    description: |
+      Retrieve all organisation
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {[{"id":"1", "name":"orgA"}, {"id":"2", "name":"orgB"}]}
+  post:
+    is: [private]
+    description: |
+      Create a new organisation
+    body:
+      application/json:
+        example: |
+          {"name":"orgA}
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {"id":"1", name":"orgA}
+  /{id}:
+    get:
+      description: |
+        Retrieve an organisation
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {"id":"1", "name":"orgA"}
+    put:
+      is: [private]
+      description: |
+        Update an existing resource
+      body:
+        application/json:
+          example: |
+            {"id":"1", name":"orgA}
+      responses:
+        204:
+          description: |
+            Succesfully updated the resource 
+    delete:
+      is: [private]
+      description: |
+        Retrieve organisation
+      responses:
+        204:
+          description: |
+            Succesfully deleted resource
+  /{organisationId}:
+    /sensors:
+      get:
+        description: |
+          Retrieve a sensor witch belong to an organisation is you are authenticated you retrive private and public
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  {[{"id":"1", "name":"temperature sensor", "description":"ROOM_1", "type":"TEMPERATURE", "public":"true"},{"id":"2", "name":"temperature sensor", "description":"ROOM_2", "type":"TEMPERATURE", "public":"true"}]}  
+      post:
+        is: [private]
+        description: Create a sensor
+        body:
+          application/json:
+            example: |
+              { "name":"temperature sensor", "description":"ROOM_1", "type":"TEMPERATURE", "public":"true" }
+        responses:
+          201:
+            body:
+              application/json:
+                example: |
+                  {"id":1, "name":"temperature sensor", "description":"ROOM_1", "type":"TEMPERATURE", "public":"true"}
+      /{sensorId}:
+        get:
+          is: [private]
+          description: |
+            Retrieve a sensor
+          responses:
+            200:
+              body:
+                application/json:
+                  example: |
+                    {"id":"1", "name":"temperature sensor", "description":"ROOM_1", "type":"TEMPERATURE", "public":"false"}
+        put:
+          is: [private]
+          description: Update a sensor
+          body:
+            application/json:
+              example: |
+                {"id":"1", "name":"temperature sensor", "description":"ROOM_1", "type":"TEMPERATURE", "public":"true" }
+          responses:
+            200:
+              description: |
+                Succesfully update resource
+        delete:
+          is: [private]
+          description: |
+            delete sensor
+          responses:
+            200:
+              description: |
+                Succesfully deleted resource
+    /users:
+      get:
+        description: |
+          Retrieve all users who belong to an organisation
+        responses:
+          200:
+            body:
+              application/json:
+                example: |
+                  {[{"id":"1", "name":"me", "password":"1234"}, {"id":"2", "name":"you", "password":"4567"}]}
+      post:
+        is: [private]
+        description: Create a user
+        body:
+          application/json:
+            example: |
+              {"name":"me", "password":"1234"}
+        responses:
+          201:
+            body:
+              application/json:
+                example: |
+                  {"id":"id", name":"me", "password":"1234"}
+      /{id}:
+        put:
+          is: [private]
+          description: Update a sensor
+          body:
+            application/json:
+              example: |
+                {"id":"1", "name":"me", "password":"1234"}
+          responses:
+            200:
+              description: |
+                Succesfully update resource
+        delete:
+          is: [private]
+          description: |
+            delete user
+          responses:
+            200:
+              description: |
+                Succesfully deleted resource
+/facts:
+  get:
+    description: |
+      Retrieve the total number of observations reported by a sensor
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {"observations":"1024"}   
+  /?date:
+    get:
+      description: |
+        Retrieve the total number of observations, as well as their min/max/average values for one specific day
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                {[{"sensorId":"1", "observations":"1024", "min":"18.06", "max":"23.7", "average":"21.5"}, {"sensorId":"2", "observations":"128", "min":"-15", "max":"125", "average":"42"}]} 
