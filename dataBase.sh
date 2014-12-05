@@ -3,7 +3,7 @@ DB_NAME=AMTDatabase
 DB_TECHNICAL_USER=amtUser	
 DB_TECHNICAL_USER_PASSWORD=1234
 
-mysql -u root -p <<QUERY_INPUT
+mysql5 -h 127.0.0.1 -u root -p <<QUERY_INPUT
 
 DROP DATABASE IF EXISTS $DB_NAME;	
 CREATE DATABASE $DB_NAME;
@@ -20,25 +20,11 @@ CREATE USER '$DB_TECHNICAL_USER'@'%' IDENTIFIED BY '$DB_TECHNICAL_USER_PASSWORD'
 GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_TECHNICAL_USER'@'localhost';	  
 GRANT ALL PRIVILEGES ON $DB_NAME.* TO '$DB_TECHNICAL_USER'@'%';
 
-USE $DB_NAME;	
-CREATE TABLE \`sensors\` (
-  \`id\` int(11) NOT NULL AUTO_INCREMENT,	
-  \`description\` tinytext NOT NULL, 	
-  \`type\` tinytext NOT NULL,
-  PRIMARY KEY (\`id\`),
-  UNIQUE KEY \`id\` (\`id\`)	
-)ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;	
-
-INSERT INTO \`sensors\` (\`id\`, \`description\`, \`type\`) VALUES (NULL, 'ROOM_1', 'TEMPERATURE');
-INSERT INTO	\`sensors\` (\`id\`, \`description\`, \`type\`) VALUES (NULL, 'ROOM_2', 'TEMPERATURE');
-INSERT INTO	\`sensors\` (\`id\`, \`description\`, \`type\`) VALUES (NULL, 'ROOM_31', 'TEMPERATURE');
-INSERT INTO	\`sensors\` (\`id\`, \`description\`, \`type\`) VALUES (NULL, 'CAR_12', 'SPEED');
-INSERT INTO	\`sensors\` (\`id\`, \`description\`, \`type\`) VALUES (NULL, 'CAR_99', 'SPEED');
 QUERY_INPUT
 
 
 
-ASADMIN=/home/bradock/glassfish-4.0/glassfish/bin/asadmin
+ASADMIN=/Users/Iosis/GlassFish_Server/bin/asadmin
 
 DOMAIN_NAME=domainAMT
 JDBC_CONNECTION_POOL_NAME=${DB_NAME}_pull

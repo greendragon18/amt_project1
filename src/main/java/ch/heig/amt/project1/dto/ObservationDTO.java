@@ -36,9 +36,8 @@ public class ObservationDTO implements Serializable {
     public Date getTimestamp() {
         return timestamp;
     }
-
-    public void setTimestamp(Date timestemp) {
-        this.timestamp = timestemp;
-    }
     
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+    }
 }
