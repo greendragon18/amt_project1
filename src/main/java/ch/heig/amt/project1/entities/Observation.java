@@ -38,7 +38,7 @@ public class Observation implements Serializable{
     private Integer value;
     @Column(name="OBSERVATION_TIMESTEMP")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date timestemp;
+    private Date timestamp;
     
     @ManyToOne
     private Sensor sensor;
@@ -61,12 +61,12 @@ public class Observation implements Serializable{
         this.value = value;
     }
 
-    public Date getTimestemp() {
-        return timestemp;
+    public Date getTimestamp() {
+        return timestamp;
     }
 
-    public void setTimestemp(Date timestemp) {
-        this.timestemp = timestemp;
+    public void setTimestamp(Date timestemp) {
+        this.timestamp = timestemp;
     }
 
     public Sensor getSensor() {

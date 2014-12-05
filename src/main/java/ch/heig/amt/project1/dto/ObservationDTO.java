@@ -15,7 +15,7 @@ import java.util.Date;
 public class ObservationDTO implements Serializable {
     private Long idObservation;
     private Integer value;
-    private Date timestemp;
+    private Date timestamp;
 
     public Long getIdObservation() {
         return idObservation;
@@ -33,12 +33,12 @@ public class ObservationDTO implements Serializable {
         this.value = value;
     }
 
-    public Date getTimestemp() {
-        return timestemp;
+    public Date getTimestamp() {
+        return timestamp;
     }
 
-    public void setTimestemp(Date timestemp) {
-        this.timestemp = timestemp;
+    public void setTimestamp(Date timestemp) {
+        this.timestamp = timestemp;
     }
     
 }

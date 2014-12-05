@@ -12,6 +12,7 @@ import ch.heig.amt.project1.dto.SensorDTO;
 import ch.heig.amt.project1.entities.Observation;
 import ch.heig.amt.project1.entities.Sensor;
 import java.io.IOException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -72,9 +73,13 @@ public class SensorResource {
     @GET @Path("{id}/observations")
     @Produces("application/json")
     public Observation getObservation(@PathParam("id") Long id) {
+        //TODO
         Observation o = new Observation();
+        o.setIdObservation(1l);
         o.setValue(1234);
+        o.setTimestamp(new Date(2014, 11, 4));
         observationDao.create(o);
+        
         return o;
     }
     
@@ -82,6 +87,11 @@ public class SensorResource {
     @Consumes("application/json")
     @Produces("application/json")
     public ObservationDTO createObservations(ObservationDTO observationDTO, @PathParam("id") Long id, @Context HttpServletResponse response) throws IOException {
+        System.out.println(observationDTO.getValue());
+        System.out.println(observationDTO.getValue());
+        System.out.println(observationDTO.getValue());
+        System.out.println(observationDTO.getValue());
+        
         Observation observation = new Observation();
         try {
             observationDao.dtoToEntity(observation, observationDTO, id);

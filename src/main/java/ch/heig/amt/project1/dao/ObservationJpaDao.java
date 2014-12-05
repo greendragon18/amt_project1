@@ -8,6 +8,7 @@ package ch.heig.amt.project1.dao;
 import ch.heig.amt.project1.dto.ObservationDTO;
 import ch.heig.amt.project1.entities.Observation;
 import ch.heig.amt.project1.entities.Sensor;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -60,7 +61,7 @@ public class ObservationJpaDao implements ObservationDaoLocal {
         
         observationDTO.setIdObservation(observation.getIdObservation());
         observationDTO.setValue(observation.getValue());
-        observationDTO.setTimestemp(observationDTO.getTimestemp());
+        observationDTO.setTimestamp(observationDTO.getTimestamp());
         
         return observationDTO;
     }
@@ -70,7 +71,7 @@ public class ObservationJpaDao implements ObservationDaoLocal {
         Observation observation = em.find(Observation.class, observationDTO.getIdObservation());
         
         observation.setValue(observationDTO.getValue());
-        observation.setTimestemp(observationDTO.getTimestemp());
+        observation.setTimestamp(observationDTO.getTimestamp());
         
         return observation;
     }
@@ -82,7 +83,7 @@ public class ObservationJpaDao implements ObservationDaoLocal {
         if(sensor == null) throw new Exception("no sensor find");
         
         observation.setValue(observationDTO.getValue());
-        observation.setTimestemp(observationDTO.getTimestemp());
+        observation.setTimestamp( observationDTO.getTimestamp());
         observation.setSensor(sensor);
     }
 }
