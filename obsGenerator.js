@@ -1,5 +1,21 @@
+/*
+ * To use this script, use the command:
+ * > node obsGenerator ['fill', 'simulate'] ([fill_amount, simulation_cadency])
+ * 
+ * NOTE: to make this script run, you have to install the following packages:
+ * async (https://www.npmjs.org/package/async)
+ * sleep (https://www.npmjs.org/package/sleep)
+ *
+ * Your can install both with NPM
+ * npm install package_name 
+ *
+ * (You'll maybe need the admin rights)
+ */
 var http = require('http');
 var async = require('async');
+var sleep = require('sleep');
+
+var sensors;
 
 //Create Observation
 var createObs = function(){
@@ -17,17 +33,20 @@ var error = function(err){
 } ;
 
 //Working functions
-var simulate = function(sensors) {
-  async.forever(sendLoop(sensors), error);
+var simulate = function() {
+  async.forever(sendLoop, error);
 }
 
-var sendLoop = function(sensors, done) {
-  send(sensors[Math.floor(sensors.length * Math.random())]);
-  setTimeout(function(){}, Math.floor((Math.random() * 30000)+500)); //entre 500 milis et 30 sec.
+var sendLoop = function(done) {
+  var limit = (process.argv[3] === undefined)?30:process.argv[3];
+  send(sensors[Math.floor(sensors.length * Math.random())].idSensor);
+  var timer = Math.floor((Math.random() * limit)+1);
+  console.log("Wait " + timer + " sec...");
+  sleep.sleep(timer); //entre 1 et 30 sec.
   setImmediate(done);
 }
 
-var execute = function(sensors) {
+var execute = function() {
   sensors.forEach(function (val, index, array) {
     var num = (process.argv[3] === undefined)?5000:process.argv[3];
     for(i=0; i <= num; i++) {
@@ -39,7 +58,6 @@ var execute = function(sensors) {
 //POST
 var send = function(id) {
   var data = JSON.stringify(createObs());
-  console.log(data);
 
   // Set up the request
   var options = {
@@ -55,17 +73,15 @@ var send = function(id) {
 
   var req = http.request(options, function(res) {
       res.setEncoding('utf8');
-      res.on('data', function (chunk) {
-        console.log('Response: ' + chunk);
+      res.on('data', function(chunk) {
+        console.log("Add " + chunk + " to sensor #" + id);
       });
   });
 
   req.on('error', function (err) {
-    //console.log(req);
     console.log(err.message);
   });
 
-  // post the data
   req.write(data);
   req.end();
 }
@@ -84,11 +100,12 @@ http.get("http://localhost:8080/amt_project1/api/sensors/", function(res) {
   });
 
   res.on('end', function() {
+    sensors = JSON.parse(str);
     if(process.argv[2] == 'fill') {
-      execute(JSON.parse(str));
+      execute();
     }
     else if(process.argv[2] == 'simulate') {
-      simulate(JSON.parse(str))
+      simulate();
     }
     
   });
