@@ -24,7 +24,7 @@ Clone this repository with the following commands:
 ```
 git clone https://github.com/greendragon18/amt_project1.git
 ```
-...or just download a ZIP file from https://github.com/greendragon18/amt_project1.
+...or just download the master branch's ZIP file from https://github.com/greendragon18/amt_project1/archive/master.zip.
 
 ### Step 3: Configure the beast (domain and database)
 Open the **INSTALL.sh** file and check on the header if constants fits with your system (especially the "PATH" part). If all seems good to you, run it:
