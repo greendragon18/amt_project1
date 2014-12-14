@@ -13,7 +13,7 @@ import javax.ejb.Local;
 
 /**
  *
- * @author bradock
+ * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 @Local
 public interface DayStatsDaoLocal {

@@ -7,13 +7,12 @@ package ch.heig.amt.project1.dao;
 
 import ch.heig.amt.project1.dto.ObservationDTO;
 import ch.heig.amt.project1.entities.Observation;
-import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
 /**
  *
- * @author bradock
+ *@author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 @Local
 public interface ObservationDaoLocal {

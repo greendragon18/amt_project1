@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author bradock
+ * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 public class ObservationsCountDTO extends FactDTO implements Serializable{
     private Long idSensor;

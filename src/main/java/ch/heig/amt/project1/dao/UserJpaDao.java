@@ -16,7 +16,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Butticaz Leal Nicolas & Piere-Alin Curty
+ *@author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 @Stateless
 public class UserJpaDao implements UserDaoLocal {

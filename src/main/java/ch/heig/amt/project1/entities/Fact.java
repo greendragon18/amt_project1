@@ -8,16 +8,18 @@ package ch.heig.amt.project1.entities;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 /**
  *
- * @author bradock
+ * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
@@ -29,7 +31,8 @@ public abstract class Fact implements Serializable{
     private Boolean isPublic;
     
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
     private Organisation organisation;
 
     public Long getIdFact() {

@@ -6,6 +6,7 @@
 package ch.heig.amt.project1.dao;
 
 import ch.heig.amt.project1.dto.SensorDTO;
+import ch.heig.amt.project1.entities.Observation;
 import ch.heig.amt.project1.entities.Organisation;
 import ch.heig.amt.project1.entities.Sensor;
 import java.util.List;
@@ -16,13 +17,16 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author Butticaz Leal Nicolas & Piere-Alin Curty
+ * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 @Stateless
 public class SensorJpaDao implements SensorDaoLocal {
 
     @EJB
     private OrganisationDaoLocal organisationDao;
+    @EJB
+    private ObservationDaoLocal observationDao;
+    
     @PersistenceContext
     EntityManager em;
 

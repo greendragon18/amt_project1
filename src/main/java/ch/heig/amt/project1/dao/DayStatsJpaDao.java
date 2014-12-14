@@ -18,7 +18,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author bradock
+ * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 @Stateless
 public class DayStatsJpaDao implements DayStatsDaoLocal {
