@@ -16,6 +16,8 @@ Before using our application, you will first need to download and install the fo
 - Java EE 7 with an application server (GlassFish 4 or newer recommended)  
 - Maven 3.2 or newer
 
+**Note:** Please make sure everything has the same bitness: **32-bit and 64-bit modules do not mix under any circumstances**.
+
 ### Step 2: Catch the beast
 Clone this repository with the following commands:  
 
@@ -48,8 +50,6 @@ If everything has been setted up correctly to this point, you can try to launch 
 asadmin start-domain domainAMT  
 deploy target/project1-1.0-SNAPSHOT
 ```
-### Note:
-Finally, please make sure everything has the same bitness: **32-bit and 64-bit modules do not mix under any circumstances**.
 
 ##Specification available
 All available functionnalities are documented in our [API Reference](). You can see below what we already have implemented:
