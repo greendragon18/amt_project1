@@ -6,6 +6,7 @@
 package ch.heig.amt.project1.entities;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,8 +23,11 @@ import javax.persistence.ManyToOne;
 @Inheritance(strategy=InheritanceType.JOINED)
 public abstract class Fact implements Serializable{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idFact;
+    @Column(nullable = false)
+    private Boolean isPublic;
+    
     
     @ManyToOne
     private Organisation organisation;
@@ -34,6 +38,14 @@ public abstract class Fact implements Serializable{
 
     public void setIdFact(Long idFact) {
         this.idFact = idFact;
+    }
+
+    public Boolean getIsPublic() {
+        return isPublic;
+    }
+
+    public void setIsPublic(Boolean isPublic) {
+        this.isPublic = isPublic;
     }
 
     public Organisation getOrganisation() {

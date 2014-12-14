@@ -58,7 +58,8 @@ public class OrganisationJpaDao implements OrganisationDaoLocal {
         
         organisationDTO.setIdOrganisation(organisation.getIdOrganisation());
         organisationDTO.setName(organisation.getName());
-        organisationDTO.setFkManager(organisation.getManager().getIdUser());
+        if(organisation.getManager() != null)
+            organisationDTO.setFkManager(organisation.getManager().getIdUser());
         
         return organisationDTO;
     }
@@ -77,7 +78,12 @@ public class OrganisationJpaDao implements OrganisationDaoLocal {
     }
     
     @Override
-    public void dtoToEntity(Organisation organisation, OrganisationDTO organisationDTO){
+    public Organisation dtoToNewEntity(OrganisationDTO organisationDTO) throws Exception{
+        if(organisationDTO.getName() == null) 
+            throw new Exception("missing information");
+        
+        Organisation organisation = new Organisation();
         organisation.setName(organisationDTO.getName());
+        return organisation;
     }
 }

@@ -32,5 +32,7 @@ public interface SensorDaoLocal {
     public List<Sensor> findAll();
 
     public Sensor dtoToNewEntity(SensorDTO sensorDTO, Long idOrganisation) throws Exception;
+
+    public List<Sensor> findByOrganisation(Long idOrganisation);
     
 }

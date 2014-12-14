@@ -17,6 +17,7 @@ public class SensorDTO implements Serializable{
     private String description;
     private String type;
     private Boolean isPublic;
+    private Long fkOrganisation;
 
     public Long getIdSensor() {
         return idSensor;
@@ -58,6 +59,12 @@ public class SensorDTO implements Serializable{
         this.isPublic = isPublic;
     }
 
-   
-    
+    public Long getFkOrganisation() {
+        return fkOrganisation;
+    }
+
+    public void setFkOrganisation(Long fkOrganisation) {
+        this.fkOrganisation = fkOrganisation;
+    }
+
 }

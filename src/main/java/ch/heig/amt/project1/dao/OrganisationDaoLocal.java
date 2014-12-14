@@ -31,6 +31,6 @@ public interface OrganisationDaoLocal {
     
     public Organisation dtoToEntity(OrganisationDTO organisationDTO) throws Exception;
     
-    public void dtoToEntity(Organisation organisation, OrganisationDTO organisationDTO);
+    public Organisation dtoToNewEntity(OrganisationDTO organisationDTO) throws Exception;
 
 }

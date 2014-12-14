@@ -65,13 +65,18 @@ public class OrganisationResource {
     @POST
     @Consumes("application/json")
     @Produces("application/json")
-    public OrganisationDTO createOrganistaion(OrganisationDTO organisationDTO) {
-        Organisation organisation = new Organisation();
+    public OrganisationDTO createOrganistaion(OrganisationDTO organisationDTO, @Context HttpServletResponse response) throws IOException {
         
-        organisationDao.dtoToEntity(organisation, organisationDTO); 
-        organisationDao.create(organisation);
-          
-        return organisationDao.entityToDTO(organisation);
+        try {
+            Organisation organisation = organisationDao.dtoToNewEntity(organisationDTO);
+            organisationDao.create(organisation);
+            
+            return organisationDao.entityToDTO(organisation);
+        } catch (Exception ex) {
+            Logger.getLogger(OrganisationResource.class.getName()).log(Level.SEVERE, null, ex);
+            response.sendError(404);
+        }
+        return null;
     }
     
     @GET @Path("{idOrganisation}")
@@ -85,7 +90,7 @@ public class OrganisationResource {
     @Consumes("application/json")
     @Produces("application/json")
     public OrganisationDTO updateOrganistaion(@PathParam("idOrganisation") Long id, OrganisationDTO organisationDTO) throws Exception {
-        
+        organisationDTO.setIdOrganisation(id);
         Organisation organisation = organisationDao.dtoToEntity(organisationDTO); 
         organisationDao.update(organisation);
           
@@ -102,8 +107,8 @@ public class OrganisationResource {
     
     @GET @Path("{idOrganisation}/sensors")
     @Produces("application/json")
-    public List<SensorDTO> getSensors() {
-        List<Sensor> sensors = sensorDao.findAll();
+    public List<SensorDTO> getSensors(@PathParam("idOrganisation") Long id) {
+        List<Sensor> sensors = sensorDao.findByOrganisation(id);
         LinkedList<SensorDTO> sensorsDTO = new LinkedList<>();
         
         for(Sensor sensor : sensors){
@@ -142,6 +147,7 @@ public class OrganisationResource {
     public void updateSensor(SensorDTO sensorDTO, @PathParam("idSensor") Long id, @Context HttpServletResponse response) throws IOException{ 
         Sensor sensor;
         try {
+            sensorDTO.setIdSensor(id);
             sensor = sensorDao.dtoToEntity(sensorDTO);
             sensorDao.update(sensor);
         } catch (Exception ex) {
@@ -197,10 +203,11 @@ public class OrganisationResource {
     
     @PUT @Path("{idOrganisation}/users/{idUser}")
     @Consumes("application/json")
-    public void updateUser(UserDTO userDTO, @PathParam("idOrganisation") Long id, @Context HttpServletResponse response) throws IOException{ 
+    public void updateUser(UserDTO userDTO, @PathParam("idUser") Long idUser, @Context HttpServletResponse response) throws IOException{ 
         User user;
         try {
-            user = userDao.dtoToEntity(userDTO, id);
+            userDTO.setIdUser(idUser);
+            user = userDao.dtoToEntity(userDTO);
             userDao.update(user);
         } catch (Exception ex) {
             Logger.getLogger(OrganisationResource.class.getName()).log(Level.SEVERE, null, ex);

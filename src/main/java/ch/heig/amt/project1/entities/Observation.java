@@ -26,17 +26,17 @@ import javax.persistence.TemporalType;
 @NamedQueries({
     @NamedQuery(
             name = "findLast1000Observation",
-            query = "SELECT o FROM Observation o"
-//            query = "SELECT o FROM Observation o JOIN o.sensor s WHERE s.idSensor=:id "
+            query = "SELECT o FROM Observation o WHERE o.sensor.idSensor = :idSensor"
     )
 })
 public class Observation implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idObservation;
-    @Column(name="OBSERVATION_VALUE")
-    private Integer value;
-    @Column(name="OBSERVATION_TIMESTAMP")
+    @Column(name="OBSERVATION_VALUE", nullable = false)
+    private Double value;
+    
+    @Column(name="OBSERVATION_TIMESTAMP", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
     
@@ -53,11 +53,11 @@ public class Observation implements Serializable{
         this.idObservation = idObservation;
     }
 
-    public Integer getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 
@@ -65,8 +65,8 @@ public class Observation implements Serializable{
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public void setTimestamp(Date timestemp) {
+        this.timestamp = timestemp;
     }
 
     public Sensor getSensor() {

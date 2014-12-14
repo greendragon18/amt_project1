@@ -6,7 +6,6 @@
 package ch.heig.amt.project1.dto;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  *
@@ -14,8 +13,8 @@ import java.util.Date;
  */
 public class ObservationDTO implements Serializable {
     private Long idObservation;
-    private Integer value;
-    private Date timestamp;
+    private Double value;
+    private Long timestamp;
 
     public Long getIdObservation() {
         return idObservation;
@@ -25,19 +24,20 @@ public class ObservationDTO implements Serializable {
         this.idObservation = idObservation;
     }
 
-    public Integer getValue() {
+    public Double getValue() {
         return value;
     }
 
-    public void setValue(Integer value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 
-    public Date getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
-    
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+
+    public void setTimestamp(Long timestemp) {
+        this.timestamp = timestemp;
     }
+    
 }

@@ -68,31 +68,32 @@ public class UserJpaDao implements UserDaoLocal {
     @Override
     public User dtoToNewEntity(UserDTO userDTO, Long idOrganisation) throws Exception{
         Organisation organisation = organisationDao.findById(idOrganisation);
-        if(organisation == null ||userDTO.getFirstName() == null || userDTO.getLastName() == null || userDTO.getEmail() == null || userDTO.getPassword() == null) 
+        if(organisation == null) throw new Exception("Organisation not found");
+        if(userDTO.getFirstName() == null || userDTO.getLastName() == null || userDTO.getEmail() == null || userDTO.getPassword() == null) 
             throw new Exception("Missing information");
         
         User user = new User();
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
-        user.setPassword(user.getPassword());
+        user.setPassword(userDTO.getPassword());
         user.setOrganisation(organisation);
         
         return user;
     }
     
     @Override
-    public User dtoToEntity(UserDTO userDTO, Long idOrganisation) throws Exception{
-        Organisation organisation = organisationDao.findById(idOrganisation);
+    public User dtoToEntity(UserDTO userDTO) throws Exception{
         User user = em.find(User.class, userDTO.getIdUser());
-        if(organisation == null ||user == null || userDTO.getFirstName() == null || userDTO.getLastName() == null || userDTO.getEmail() == null || userDTO.getPassword() == null) 
+        
+        if(user == null) throw new Exception("User not found");
+        if(userDTO.getFirstName() == null || userDTO.getLastName() == null || userDTO.getEmail() == null || userDTO.getPassword() == null) 
             throw new Exception("Missing information");
         
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setEmail(userDTO.getEmail());
         user.setPassword(user.getPassword());
-        user.setOrganisation(organisation);
         
         return user;
     }

@@ -39,4 +39,5 @@ public class OrganisationDTO implements Serializable{
     public void setFkManager(Long fkManager) {
         this.fkManager = fkManager;
     }
+    
 }

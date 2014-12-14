@@ -5,6 +5,8 @@
  */
 package ch.heig.amt.project1.api;
 
+import ch.heig.amt.project1.business.ObservationsFlowDaysStatsProssessorLocal;
+import ch.heig.amt.project1.business.ObservationsFlowCountProcessorLocal;
 import ch.heig.amt.project1.dao.ObservationDaoLocal;
 import ch.heig.amt.project1.dao.SensorDaoLocal;
 import ch.heig.amt.project1.dto.ObservationDTO;
@@ -12,7 +14,6 @@ import ch.heig.amt.project1.dto.SensorDTO;
 import ch.heig.amt.project1.entities.Observation;
 import ch.heig.amt.project1.entities.Sensor;
 import java.io.IOException;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -37,9 +38,14 @@ import javax.ws.rs.core.UriInfo;
 @Stateless
 public class SensorResource {
     @EJB
+    private ObservationsFlowCountProcessorLocal ObservationsFlowCountProcessor;
+    @EJB
+    private ObservationsFlowDaysStatsProssessorLocal ObservationsFlowDaysStatsProssessor;
+    @EJB
     SensorDaoLocal sensorDao;
     @EJB
     ObservationDaoLocal observationDao;
+    
     
     @Context
     private UriInfo context;
@@ -62,42 +68,37 @@ public class SensorResource {
     
     @GET @Path("{id}")
     @Produces("application/json")
-    public SensorDTO getSensor(@PathParam("id") Long id) {
+    public SensorDTO getSensor(@PathParam("id") Long id, @Context HttpServletResponse response) throws IOException {
         Sensor sensor = sensorDao.findById(id);
         if (sensor != null)
             return sensorDao.entityToDTO(sensor);
         else
-            return null;
+            response.sendError(404);
+        return null;
     }
     
     @GET @Path("{id}/observations")
     @Produces("application/json")
-    public Observation getObservation(@PathParam("id") Long id) {
-        //TODO
-        Observation o = new Observation();
-        o.setIdObservation(1l);
-        o.setValue(1234);
-        o.setTimestamp(new Date(2014, 11, 4));
-        observationDao.create(o);
+    public List<ObservationDTO> getObservations(@PathParam("id") Long id) {
+        List<Observation> observations = observationDao.findLast1000Observation(id);
+        List<ObservationDTO> observationsDTO = new LinkedList<>();
         
-        return o;
+        for(Observation observation : observations){
+            observationsDTO.add(observationDao.entityToDTO(observation));
+        }
+        return observationsDTO;
     }
     
     @POST @Path("{id}/observations")
     @Consumes("application/json")
     @Produces("application/json")
-    public ObservationDTO createObservations(ObservationDTO observationDTO, @PathParam("id") Long id, @Context HttpServletResponse response) throws IOException {
-        System.out.println(observationDTO.getValue());
-        System.out.println(observationDTO.getValue());
-        System.out.println(observationDTO.getValue());
-        System.out.println(observationDTO.getValue());
-        
-        Observation observation = new Observation();
+    public ObservationDTO createObservations(ObservationDTO observationDTO, @PathParam("id") Long id, @Context HttpServletResponse response) throws IOException {   
         try {
-            observationDao.dtoToEntity(observation, observationDTO, id);
+            Observation observation = observationDao.dtoToNewEntity(observationDTO, id);
             observationDao.create(observation);
+            ObservationsFlowCountProcessor.processObservation(observation);
+            ObservationsFlowDaysStatsProssessor.processObservation(observation);
             return observationDao.entityToDTO(observation);
-        //the idSensor dose not exist
         } catch (Exception ex) {
             Logger.getLogger(SensorResource.class.getName()).log(Level.SEVERE, null, ex);
             response.sendError(404);

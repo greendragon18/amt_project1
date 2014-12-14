@@ -8,71 +8,91 @@ mediaType: application/json
 
 traits:
   - private: !include _traits/private.raml
-/users:
-  description: This is user resource.
-  get:
-    is: [private]
-    description: Retrieve all user
-    responses:
-      200:
-        body:
-          application/json:
-            example: |
-              {[{"id":"1", "name":"me", "password":"1234", "organisation":"1"}, {"id":"2", "name":"you", "password":"4567", "organisation":"2"}]}
-  /{id}:
-    get:
-      description: Retrieve a user by his id
-      responses:
-        200:
-          body:
-            application/json:
-              example: |
-               {"id":"1", "name":"me", "password":"1234"}
-        404:
-          description: The resource was not found.
 /sensors:
   description: This is a sensor resource
   get:
-    description: Retrieve all public sensor
+    description: Retrieve all public sensors and the private sensors of the user organisation
     responses:
       200:
         body:
           application/json:
             example: |
-              {[{"id":"1", "name":"temperature sensor", "description":"ROOM_1", "type":"TEMPERATURE", "public":"true"},{"id":"2", "name":"temperature sensor", "description":"ROOM_2", "type":"TEMPERATURE", "public":"true"}]}
+              [
+                {
+                  "idSensor": 7, 
+                  "name": "temperature sensor", 
+                  "description": "ROOM_1", 
+                  "type": "TEMPERATURE", 
+                  "isPublic": true,
+                  "fkOrganisation": 1,
+                },{
+                  "idSensor": 8, 
+                  "name": "temperature sensor", 
+                  "description": "CPU_1", 
+                  "type": "TEMPERATURE", 
+                  "isPublic": true,
+                  "fkOrganisation": 2,
+                }
+              ]
   /{id}:
     get:
-      description: Retrieve all public sensor
+      description: Retrieve a given sensor 
       responses:
         200:
           body:
             application/json:
               example: |
-                {"id":"1", "name":"temperature sensor", "description":"ROOM_1", "type":"TEMPERATURE", "public":"true"}}
+                [
+                  {
+                    "idSensor": 7, 
+                    "name": "temperature sensor", 
+                    "description": "ROOM_1", 
+                    "type": "TEMPERATURE", 
+                    "isPublic": true,
+                    "fkOrganisation": 1,
+                  }
+                ]
+        403:
+          description: |
+            You are not allowed to get this sensor.
+            Be sure that you are authenticated and you belongs to the same organization as the sensor
+        404:
+          description: |
+            There is no sensor for the given id.
+
     /observations:
       get:
         description: |
-          Retrieve the last 1000 observations of a sensor
+          Retrieve the last 1000 observations of a given sensor
+          if the sensor is not found or it don't have any observations the list retrived will be empty
         responses:
           200:
             body:
               application/json:
                 example: |
-                  {[{"id":"1", "value":"21.2", "timestamp":"1417036680"}, {"id":"2", "value":"22.1", "timestamp":"141703680"}
+                  [{"idObservation": 11, "timestamp": 1418482448970, "value": 46}, {"idObservation": 12, "timestamp": 1418482458970, "value": 44.9}]
       post:
         is: [private]
         description: |
-          Create a new observation
+          Create a new observation for the given sensor
+          The timestamp is number of millisec since 1/1/1970 (Java timestamp not Unix timestamp)
+          if you using unix timestamp don't forget to multiply by 1000
         body:
           application/json:
             example: |
-              {"value":"21.2, "timestamp":"1417036680"}
+              {"value": 21.2, "timestamp":"1418211998000"}
         responses:
           200:
             body:
               application/json:
                 example: |
-                  {"id":"1", "value":"21.2, "timestamp":"1417036680"}
+                  {"idObservation": 11, "timestamp": 1418482448970, "value": 46}
+          403:
+            description: |
+              You must be authenticated for this action
+          404:
+            description: |
+              the given sensor is not found or the given json is improperly formatted
 /organisations:
   get:
     description: |
@@ -82,21 +102,23 @@ traits:
         body:
           application/json:
             example: |
-              {[{"id":"1", "name":"orgA"}, {"id":"2", "name":"orgB"}]}
+              [{"idOrganisation": 1, "name": "HEIG", "fkManager": 3}, {"idOrganisation": 2, "name": "AMT", "fkManager": 5}]
   post:
-    is: [private]
     description: |
       Create a new organisation
     body:
       application/json:
         example: |
-          {"name":"orgA}
+          {"name": "orgA"}
     responses:
       200:
         body:
           application/json:
             example: |
-              {"id":"1", name":"orgA}
+              {"idOrganisation": 52, "name": "orgA"}
+      404:
+        description: |
+          The given json is improperly formatted
   /{id}:
     get:
       description: |
@@ -106,19 +128,28 @@ traits:
           body:
             application/json:
               example: |
-                {"id":"1", "name":"orgA"}
+                {"idOrganisation": 1, "name": "HEIG", "fkManager": 3}
     put:
       is: [private]
       description: |
-        Update an existing resource
+        Update an existing organisation
+        if the organisation don't have any manager you just need basic authentication else you need to be the manager of the organisation
       body:
         application/json:
           example: |
-            {"id":"1", name":"orgA}
+            {"name": "HEIG", "fkManager": 3}
       responses:
         204:
+          body:
+            application/json:
+              example: |
+                {"idOrganisation": 1, "name": "HEIG", "fkManager": 3}
+        403:
           description: |
-            Succesfully updated the resource 
+            if the organisation don't have any manager you need basic authentication else you need to be the manager of the organisation
+        404:
+          description: |
+            The given json is improperly formatted
     delete:
       is: [private]
       description: |
@@ -127,30 +158,58 @@ traits:
         204:
           description: |
             Succesfully deleted resource
+        403:
+          description: |
+            you must be authenticated and be the manager of this organisation
+        404:
+          description: |
+            the organisation is not found
   /{organisationId}:
     /sensors:
       get:
         description: |
-          Retrieve a sensor witch belong to an organisation is you are authenticated you retrive private and public
+          Retrieve all sensors witch belong to the given organisation is you are authenticated you retrive private and public sensors
         responses:
           200:
             body:
               application/json:
                 example: |
-                  {[{"id":"1", "name":"temperature sensor", "description":"ROOM_1", "type":"TEMPERATURE", "public":"true"},{"id":"2", "name":"temperature sensor", "description":"ROOM_2", "type":"TEMPERATURE", "public":"true"}]}  
+                  [
+                    {
+                      "idSensor": 7, 
+                      "name": "temperature sensor", 
+                      "description": "ROOM_1", 
+                      "type": "TEMPERATURE", 
+                      "isPublic": true,
+                      "fkOrganisation": 1,
+                    },{
+                      "idSensor": 8, 
+                      "name": "temperature sensor", 
+                      "description": "CPU_1", 
+                      "type": "TEMPERATURE", 
+                      "isPublic": true,
+                      "fkOrganisation": 1,
+                    }
+                  ]
       post:
         is: [private]
         description: Create a sensor
         body:
           application/json:
             example: |
-              { "name":"temperature sensor", "description":"ROOM_1", "type":"TEMPERATURE", "public":"true" }
+              {"name":"temperature sensor", "description":"ROOM_1", "type":"TEMPERATURE", "isPublic":"true" }
         responses:
           201:
             body:
               application/json:
                 example: |
-                  {"id":1, "name":"temperature sensor", "description":"ROOM_1", "type":"TEMPERATURE", "public":"true"}
+                  {"idSensor": 53, "name": "temperature sensor", "description": "ROOM_1", "type": "TEMPERATURE", "isPublic": true, "fkOrganisation": 1}
+          403:
+            description: |
+              you have to be authenticated and create sensor in your organisation
+          404:
+            description: |
+              The given json is improperly formatted or the organisation is not found
       /{sensorId}:
         get:
           is: [private]
@@ -161,18 +220,29 @@ traits:
               body:
                 application/json:
                   example: |
-                    {"id":"1", "name":"temperature sensor", "description":"ROOM_1", "type":"TEMPERATURE", "public":"false"}
+                    {"idSensor": 53, "name": "temperature sensor", "description": "ROOM_1", "type": "TEMPERATURE", "isPublic": true, "fkOrganisation": 1}
+            404:
+              description: |
+                Sensor not found
         put:
           is: [private]
           description: Update a sensor
           body:
             application/json:
               example: |
-                {"id":"1", "name":"temperature sensor", "description":"ROOM_1", "type":"TEMPERATURE", "public":"true" }
+                {"name": "temperature sensor", "description": "ROOM_1", "type": "TEMPERATURE", "isPublic": true}
           responses:
             200:
+              body:
+                application/json:
+                  example: |
+                    {"idSensor": 53, "name": "temperature sensor", "description": "ROOM_1", "type": "TEMPERATURE", "isPublic": true, "fkOrganisation": 1}
+            403:
               description: |
-                Succesfully update resource
+                you have to be authenticated and update a sensor in your organisation
+            404:
+              description: |
+                The given json is improperly formatted or the sensor is not found
         delete:
           is: [private]
           description: |
@@ -181,66 +251,148 @@ traits:
             200:
               description: |
                 Succesfully deleted resource
+            403:
+              description: |
+                you have to be authenticated and delete a sensor in your organisation
+            404:
+              description: |
+                The sensor is not found
     /users:
       get:
         description: |
-          Retrieve all users who belong to an organisation
+          Retrieve all users who belong to the given organisation
         responses:
           200:
             body:
               application/json:
                 example: |
-                  {[{"id":"1", "name":"me", "password":"1234"}, {"id":"2", "name":"you", "password":"4567"}]}
+                  [
+                    {
+                      "email": "a@a.com",
+                      "firstName": "A",
+                      "idUser": 3,
+                      "lastName": "AA"
+                    },
+                    {
+                      "email": "b@b.com",
+                      "firstName": "B",
+                      "idUser": 4,
+                      "lastName": "BB"
+                    }
+                  ]
+          403:
+            description: |
+              you have to be the manager of this organisation
+          404:
+            description: |
+              organisation not found
       post:
         is: [private]
-        description: Create a user
+        description: Create a user you have to be the manager of the given organisation except if the organisation don't have any manager
         body:
           application/json:
             example: |
-              {"name":"me", "password":"1234"}
+              {"email": "b@b.com", "firstName": "B", "lastName": "BB", "password": "12345"}
         responses:
           201:
             body:
               application/json:
                 example: |
-                  {"id":"id", name":"me", "password":"1234"}
+                  {idUser: 2, "email": "b@b.com", "firstName": "B", "lastName": "BB"}
+          403:
+            description:
+              you have to be the manager of the given organisation
+          404:
+            description:
+              The given json is improperly formatted or the organisation is not found
       /{id}:
         put:
           is: [private]
-          description: Update a sensor
+          description: Update a user. You have to be the given user or the manager of the organisation
           body:
             application/json:
               example: |
-                {"id":"1", "name":"me", "password":"1234"}
+                {"email": "b@b.com", "firstName": "B", "lastName": "BB", "password": "12345"}
           responses:
             200:
+              body:
+                application/json:
+                  example: |
+                    {idUser: 2, "email": "b@b.com", "firstName": "B", "lastName": "BB"}
+            403:
               description: |
-                Succesfully update resource
+                You have to be the given user or the manager of the organisation
+            404:
+              description: |
+                The given json is improperly formatted or the organisation/user is not found
         delete:
           is: [private]
           description: |
-            delete user
+            delete user you have to be the manager of the given user
           responses:
             200:
               description: |
                 Succesfully deleted resource
+            403:
+              description: |
+                you have to be the manager of the given user
+            404:
+              description: |
+                The user is not found
 /facts:
   get:
     description: |
-      Retrieve the total number of observations reported by a sensor
+      Retrieve the total number of observations reported by a sensor for all of them
     responses:
       200:
         body:
           application/json:
             example: |
-              {"observations":"1024"}   
-  /?date:
+              [
+                {
+                  "nbObervation": 11,
+                  "idSensor": 7,
+                  "isPublic": true,
+                  "fkOrganisation": 1
+                },
+                {
+                  "nbObervation": 11,
+                  "idSensor": 8,
+                  "isPublic": true,
+                  "fkOrganisation": 1
+                }
+              ]
+  /dayStats/?date:
     get:
       description: |
-        Retrieve the total number of observations, as well as their min/max/average values for one specific day
+        Retrieve the total number of observations, as well as their min/max/average values for one specific day for all sensors
+        You have to send a date variable in the URL with the formatted date "dd-MM-yyyy"
       responses:
         200:
           body:
             application/json:
               example: |
-                {[{"sensorId":"1", "observations":"1024", "min":"18.06", "max":"23.7", "average":"21.5"}, {"sensorId":"2", "observations":"128", "min":"-15", "max":"125", "average":"42"}]} 
+                [  
+                  {
+                    "max": 90,
+                    "min": 8,
+                    "average": 52.7,
+                    "date": "14-12-2014",
+                    "idSensor": 7,
+                    "isPublic": true,
+                    "fkOrganisation": 1
+                  },
+                  {
+                    "max": 91,
+                    "min": 4,
+                    "average": 51.9,
+                    "date": "14-12-2014",
+                    "idSensor": 8,
+                    "isPublic": true,
+                    "fkOrganisation": 1
+                  }
+                ]
+        404:
+          description: |
+            the givien date is improperly formatted
+            you have to send a date variable in the URL with the formatted date "dd-MM-yyyy"

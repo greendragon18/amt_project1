@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,19 +20,33 @@ import javax.persistence.TemporalType;
  * @author bradock
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(
+            name = "findDayStatsByIdSensorAndDate",
+            query = "SELECT d FROM DayStats d WHERE d.idSensor = :idSensor AND d.date = :date"
+    ),
+    @NamedQuery(
+            name = "findDayStatsByDate",
+            query = "SELECT d FROM DayStats d WHERE d.date = :date"
+    ),
+    @NamedQuery(
+            name = "findObservationAvridgeBySensorAndDate",
+            query = "SELECT AVG(o.value) from Observation o WHERE o.sensor.idSensor = :idSensor AND o.timestamp BETWEEN :startDate AND :endDate"
+    )
+})
 @PrimaryKeyJoinColumn(name =  "ID_DAY_STATS", referencedColumnName = "IDFACT")
 public class DayStats extends Fact implements Serializable{
     
     @Column(name="DAY_STATS_DATE", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date date;
+    @Column(name="DAY_STATS_MIN", nullable = false)
+    private Double min;
+    @Column(name="DAY_STATS_MAX", nullable = false)
+    private Double max;
     @Column(nullable = false)
-    private Long min;
+    private Double average;
     @Column(nullable = false)
-    private Long max;
-    @Column(nullable = false)
-    private Long average;
-    @Column(unique=true,  nullable = false)
     private Long idSensor;
 
     public Date getDate() {
@@ -41,27 +57,27 @@ public class DayStats extends Fact implements Serializable{
         this.date = date;
     }
 
-    public Long getMin() {
+    public Double getMin() {
         return min;
     }
 
-    public void setMin(Long min) {
+    public void setMin(Double min) {
         this.min = min;
     }
 
-    public Long getMax() {
+    public Double getMax() {
         return max;
     }
 
-    public void setMax(Long max) {
+    public void setMax(Double max) {
         this.max = max;
     }
 
-    public Long getAverage() {
+    public Double getAverage() {
         return average;
     }
 
-    public void setAverage(Long average) {
+    public void setAverage(Double average) {
         this.average = average;
     }
 

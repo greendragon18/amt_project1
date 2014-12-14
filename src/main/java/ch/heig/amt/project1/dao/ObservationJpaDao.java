@@ -14,6 +14,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -24,6 +25,8 @@ public class ObservationJpaDao implements ObservationDaoLocal {
     
     @EJB
     SensorDaoLocal sensorDao;
+    @EJB 
+    ObservationsCountDaoLocal observationsCountDao;
 
     @PersistenceContext
     EntityManager em;
@@ -51,8 +54,7 @@ public class ObservationJpaDao implements ObservationDaoLocal {
     
     @Override
     public List<Observation> findLast1000Observation(Long idSensor){
-//        return em.createNamedQuery("findLast1000Observation").setParameter("id", idSensor).setMaxResults(10000).getResultList();
-        return em.createNamedQuery("findLast1000Observation").setMaxResults(10000).getResultList();
+        return em.createNamedQuery("findLast1000Observation").setParameter("idSensor", idSensor).setMaxResults(10000).getResultList();
     }
     
     @Override
@@ -61,29 +63,36 @@ public class ObservationJpaDao implements ObservationDaoLocal {
         
         observationDTO.setIdObservation(observation.getIdObservation());
         observationDTO.setValue(observation.getValue());
-        observationDTO.setTimestamp(observationDTO.getTimestamp());
+        observationDTO.setTimestamp(observation.getTimestamp().getTime());
         
         return observationDTO;
     }
     
     @Override
-    public Observation dtoToEntity(ObservationDTO observationDTO){
+    public Observation dtoToEntity(ObservationDTO observationDTO) throws Exception{
         Observation observation = em.find(Observation.class, observationDTO.getIdObservation());
         
+        if(observation == null) throw new Exception("Observation find not find");
+        if(observationDTO.getValue() == null || observationDTO.getTimestamp() == null) throw new Exception("Missing information");
+        
         observation.setValue(observationDTO.getValue());
-        observation.setTimestamp(observationDTO.getTimestamp());
+        observation.setTimestamp(new Date(observationDTO.getTimestamp()));
         
         return observation;
     }
 
     @Override
-    public void dtoToEntity(Observation observation, ObservationDTO observationDTO, Long idSensor) throws Exception{
+    public Observation dtoToNewEntity(ObservationDTO observationDTO, Long idSensor) throws Exception{
         Sensor sensor = sensorDao.findById(idSensor);
         
-        if(sensor == null) throw new Exception("no sensor find");
+        if(sensor == null) throw new Exception("Sensor find not find");
+        if(observationDTO.getValue() == null || observationDTO.getTimestamp() == null) throw new Exception("Missing information");
         
+        Observation observation = new Observation();
         observation.setValue(observationDTO.getValue());
-        observation.setTimestamp( observationDTO.getTimestamp());
+        observation.setTimestamp(new Date(observationDTO.getTimestamp()));
         observation.setSensor(sensor);
+        
+        return observation;
     }
 }

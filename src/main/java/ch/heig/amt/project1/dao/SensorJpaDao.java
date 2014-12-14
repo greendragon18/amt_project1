@@ -53,6 +53,11 @@ public class SensorJpaDao implements SensorDaoLocal {
     }
     
     @Override
+    public List<Sensor> findByOrganisation(Long idOrganisation){
+        return em.createNamedQuery("findSensorByOrganisation").setParameter("idOrganisation", idOrganisation).getResultList();
+    }
+    
+    @Override
     public SensorDTO entityToDTO(Sensor sensor){
         SensorDTO sensorDTO = new SensorDTO();
         
@@ -61,6 +66,7 @@ public class SensorJpaDao implements SensorDaoLocal {
         sensorDTO.setDescription(sensor.getDescription());
         sensorDTO.setType(sensor.getType());
         sensorDTO.setIsPublic(sensor.getIsPublic());
+        sensorDTO.setFkOrganisation(sensor.getOrganisation().getIdOrganisation());
         
         return sensorDTO;
     }
@@ -69,7 +75,9 @@ public class SensorJpaDao implements SensorDaoLocal {
     public Sensor dtoToEntity(SensorDTO sensorDTO) throws Exception{
         Sensor sensor = em.find(Sensor.class, sensorDTO.getIdSensor());
         
-        if(sensor == null) throw new Exception("Unknown Sensor");
+        if(sensor == null) throw new Exception("Sensor not found");
+        if(sensorDTO.getName() == null || sensorDTO.getType() == null || sensorDTO.getIsPublic() == null )
+            throw new Exception("Missing informations");
         
         sensor.setName(sensorDTO.getName());
         sensor.setDescription(sensorDTO.getDescription());
@@ -83,7 +91,9 @@ public class SensorJpaDao implements SensorDaoLocal {
     public Sensor dtoToNewEntity(SensorDTO sensorDTO, Long idOrganisation) throws Exception{
         Organisation organisation = organisationDao.findById(idOrganisation);
         
-        if(organisation == null) throw new Exception("Unknown Organisation");
+        if(organisation == null) throw new Exception("Organisation not found");
+        if(sensorDTO.getName() == null || sensorDTO.getType() == null || sensorDTO.getIsPublic() == null )
+            throw new Exception("Missing informations");
         
         Sensor sensor = new Sensor();
         

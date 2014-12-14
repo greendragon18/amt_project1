@@ -7,6 +7,7 @@ package ch.heig.amt.project1.dao;
 
 import ch.heig.amt.project1.dto.ObservationDTO;
 import ch.heig.amt.project1.entities.Observation;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -29,7 +30,8 @@ public interface ObservationDaoLocal {
     
     public ObservationDTO entityToDTO(Observation observation);
     
-    public Observation dtoToEntity(ObservationDTO observationDTO);
+    public Observation dtoToEntity(ObservationDTO observationDTO) throws Exception;
     
-    public void dtoToEntity(Observation observation, ObservationDTO observationDTO, Long idSensor) throws Exception;
+    public Observation dtoToNewEntity(ObservationDTO observationDTO, Long idSensor) throws Exception;
+    
 }

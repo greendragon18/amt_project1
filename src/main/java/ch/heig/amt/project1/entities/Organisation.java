@@ -7,6 +7,7 @@ package ch.heig.amt.project1.entities;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,6 +32,7 @@ public class Organisation implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long idOrganisation;
+    @Column(nullable = false)
     private String name;
     
     @OneToMany(mappedBy="organisation")

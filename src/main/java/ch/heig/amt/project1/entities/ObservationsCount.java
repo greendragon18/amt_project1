@@ -8,6 +8,8 @@ package ch.heig.amt.project1.entities;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 /**
@@ -15,6 +17,16 @@ import javax.persistence.PrimaryKeyJoinColumn;
  * @author bradock
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(
+            name = "findObservationsCountByIdSensor",
+            query = "SELECT o FROM ObservationsCount o WHERE o.idSensor = :idSensor"
+    ),
+    @NamedQuery(
+            name = "findAllObservationsCount",
+            query = "SELECT o FROM ObservationsCount o"
+    )
+})
 @PrimaryKeyJoinColumn(name =  "ID_OBSERVATION_COUNT", referencedColumnName = "IDFACT")
 public class ObservationsCount extends Fact implements Serializable{
     @Column(unique=true,  nullable = false)

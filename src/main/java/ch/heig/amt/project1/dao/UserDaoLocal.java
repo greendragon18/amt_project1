@@ -31,6 +31,6 @@ public interface UserDaoLocal {
 
     public User dtoToNewEntity(UserDTO userDTO, Long idOrganisation) throws Exception;
 
-    public User dtoToEntity(UserDTO userDTO, Long idOrganisation) throws Exception;
+    public User dtoToEntity(UserDTO userDTO) throws Exception;
     
 }
