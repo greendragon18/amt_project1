@@ -24,7 +24,7 @@ Clone this repository with the following commands:
 ```
 git clone https://github.com/greendragon18/amt_project1.git
 ```
-...or just download a ZIP file from [https://github.com/greendragon18/amt_project1]()
+...or just download a ZIP file from https://github.com/greendragon18/amt_project1.
 
 ### Step 3: Configure the beast (domain and database)
 Open the **INSTALL.sh** file and check on the header if constants fits with your system (especially the "PATH" part). If all seems good to you, run it:
@@ -50,8 +50,10 @@ asadmin start-domain domainAMT
 deploy target/project1-1.0-SNAPSHOT
 ```
 
+Please note that, in every launch of the domain, we create a sample of 2 organisations, 4 users and 4 sensors (equally distributed in both organisations).  
+Those samples can be removed in **ch.heig.amt.project1.init.InitData.java**.
 ##Specification available
-All available functionnalities are documented in our [API Reference](). You can see below what we already have implemented:
+All available functionnalities are documented in our [API Reference](http://greendragon18.github.io/amt_project1). You can see below what we already have implemented:
 
 Specification               | Details                                       | Done ?
 --------------------------- | :-------------------------------------------- | :----:
@@ -69,7 +71,7 @@ Specification               | Details                                       | Do
 The application is delivred with a summary client-side test application that can be used for fill the database very quickly (with some random values) or simulate a constant calling of the REST API from virtual sensors.  
 This test application runs with Node.js and some npm plugins.
 ### Step 1: Setup Node.js
-Download and install Node.js from [http://nodejs.org]().  
+Download and install Node.js from http://nodejs.org.  
 Then install the following node's plugins:
 
 ```
@@ -79,8 +81,8 @@ npm install sleep
 
 More informations can be found on their respective websites:  
 
-- async [https://www.npmjs.org/package/async]()  
-- sleep [https://www.npmjs.org/package/sleep]()
+- async : https://www.npmjs.org/package/async  
+- sleep : https://www.npmjs.org/package/sleep
 
 ### Step 2: Use the script
 The script works on two mode:  
