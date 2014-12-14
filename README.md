@@ -22,8 +22,6 @@ Before using our application, you will first need to download and install the fo
 Clone this repository with the following commands:  
 
 ```
-mkdir amt_project1
-cd amt_project1
 git clone https://github.com/greendragon18/amt_project1.git
 ```
 ...or just download a ZIP file from [https://github.com/greendragon18/amt_project1]()
@@ -32,6 +30,7 @@ git clone https://github.com/greendragon18/amt_project1.git
 Open the **INSTALL.sh** file and check on the header if constants fits with your system (especially the "PATH" part). If all seems good to you, run it:
 
 ```
+cd amt_project1
 ./INSTALL.sh
 ```  
 Be sure that a new folder has been created in your application server and a new user / database in your MySQL server.  
