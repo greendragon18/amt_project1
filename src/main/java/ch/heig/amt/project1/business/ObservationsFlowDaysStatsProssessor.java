@@ -33,7 +33,7 @@ public class ObservationsFlowDaysStatsProssessor implements ObservationsFlowDays
             dayStats = new DayStats();
             dayStats.setMin(observation.getValue());
             dayStats.setMax(observation.getValue());
-            dayStats.setAverage(observation.getValue().doubleValue());
+            dayStats.setAverage(observation.getValue());
             dayStats.setDate(observation.getTimestamp());
             dayStats.setIdSensor(observation.getSensor().getIdSensor());
             dayStats.setIsPublic(observation.getSensor().getIsPublic());
