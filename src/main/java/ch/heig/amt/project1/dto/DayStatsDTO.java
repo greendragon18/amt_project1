@@ -7,7 +7,7 @@ package ch.heig.amt.project1.dto;
 
 /**
  *
- * @author bradock
+ * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 public class DayStatsDTO {
     private String date;

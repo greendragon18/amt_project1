@@ -30,7 +30,7 @@ import javax.ws.rs.core.UriInfo;
 
 /**
  *
- * @author bradock
+ * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 @Path("facts")
 @Stateless

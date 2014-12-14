@@ -17,7 +17,7 @@ import javax.persistence.TemporalType;
 
 /**
  *
- * @author bradock
+ * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 @Entity
 @NamedQueries({
@@ -46,6 +46,10 @@ public class DayStats extends Fact implements Serializable{
     private Double max;
     @Column(nullable = false)
     private Double average;
+    @Column(nullable = false)
+    private Double total;
+    @Column(nullable = false)
+    private Long nbObservation;
     @Column(nullable = false)
     private Long idSensor;
 
@@ -89,4 +93,19 @@ public class DayStats extends Fact implements Serializable{
         this.idSensor = idSensor;
     }
 
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+
+    public Long getNbObservation() {
+        return nbObservation;
+    }
+
+    public void setNbObservation(Long nbObservation) {
+        this.nbObservation = nbObservation;
+    }
 }

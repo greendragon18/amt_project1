@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author bradock
+ * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 public class UserDTO implements Serializable{
     private Long idUser;

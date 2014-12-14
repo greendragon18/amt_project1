@@ -10,7 +10,7 @@ import javax.ejb.TransactionAttributeType;
 
 /**
  *
- * @author bradock
+ * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 @Singleton
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)

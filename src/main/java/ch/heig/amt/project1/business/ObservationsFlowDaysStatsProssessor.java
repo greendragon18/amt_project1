@@ -15,7 +15,7 @@ import javax.ejb.TransactionAttributeType;
 
 /**
  *
- * @author bradock
+ * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 @Singleton
 @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -33,6 +33,8 @@ public class ObservationsFlowDaysStatsProssessor implements ObservationsFlowDays
             dayStats = new DayStats();
             dayStats.setMin(observation.getValue());
             dayStats.setMax(observation.getValue());
+            dayStats.setTotal(observation.getValue());
+            dayStats.setNbObservation(1l);
             dayStats.setAverage(observation.getValue());
             dayStats.setDate(observation.getTimestamp());
             dayStats.setIdSensor(observation.getSensor().getIdSensor());
@@ -44,7 +46,9 @@ public class ObservationsFlowDaysStatsProssessor implements ObservationsFlowDays
                 dayStats.setMin(observation.getValue());
             else if(dayStats.getMax() < observation.getValue())
                 dayStats.setMax(observation.getValue());
-            dayStats.setAverage(dayStatsDao.findObservationAvridgeBySensorAndDate(observation.getSensor().getIdSensor(), observation.getTimestamp()));
+            dayStats.setTotal(dayStats.getTotal() + observation.getValue());
+            dayStats.setNbObservation(dayStats.getNbObservation() + 1);
+            dayStats.setAverage(dayStats.getTotal()/dayStats.getNbObservation());
         }
     }
 }

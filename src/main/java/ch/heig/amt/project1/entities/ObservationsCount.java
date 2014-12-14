@@ -14,7 +14,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 
 /**
  *
- * @author bradock
+ * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 @Entity
 @NamedQueries({

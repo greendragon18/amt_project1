@@ -18,7 +18,7 @@ import javax.ejb.Startup;
 
 /**
  *
- * @author bradock
+ * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 @Singleton
 @Startup

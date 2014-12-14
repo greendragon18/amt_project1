@@ -8,9 +8,11 @@ package ch.heig.amt.project1.entities;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -18,7 +20,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Butticaz Leal Nicolas & Piere-Alin Curty
+ * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 @Entity
 @NamedQueries({
@@ -41,7 +43,8 @@ public class User implements Serializable{
     @Column(nullable = false)
     private String password;
     
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
     private Organisation organisation;
 
     public Long getIdUser() {

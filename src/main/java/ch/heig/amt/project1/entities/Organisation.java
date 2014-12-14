@@ -7,8 +7,10 @@ package ch.heig.amt.project1.entities;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +21,7 @@ import javax.persistence.OneToOne;
 
 /**
  *
- * @author Butticaz Leal Nicolas & Piere-Alin Curty
+ * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 @Entity
 @NamedQueries({
@@ -35,8 +37,12 @@ public class Organisation implements Serializable{
     @Column(nullable = false)
     private String name;
     
-    @OneToMany(mappedBy="organisation")
+    @OneToMany(targetEntity=User.class, 
+        fetch = FetchType.LAZY, 
+        cascade = CascadeType.ALL, 
+        mappedBy="organisation")
     private List<User> users;
+    
     @OneToOne
     private User manager;
 
