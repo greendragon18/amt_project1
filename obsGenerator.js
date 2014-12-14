@@ -88,7 +88,7 @@ var send = function(id) {
 
 //Main
 if(process.argv.length < 3) {
-  console.log("Usage: obsGenerator ['fill', 'simulate'] (nombre_fill)");
+  console.log("Usage: node obsGenerator ['fill', 'simulate'] ([fill_amount, simulation_cadency])");
   process.exit(0);
 }
 
