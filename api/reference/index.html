@@ -19,6 +19,7 @@
             <li class="active"><a href="/amt_project1/api">API Reference</a></li>
             <li><a href="/amt_project1/blog">Blog</a></li>
             <li><a href="/amt_project1/support">Support</a></li>
+            <li><a href="/amt_project1/howto">HOWTO<i class="glyphicon glyphicon-lock"></i></a></li>
           </ul>
         </div>
       </div>
@@ -185,7 +186,7 @@ Be sure that you are authenticated and you belongs to the same organization as t
                 <div class="panel panel-white">
                   <div class="panel-heading">
                     <h4 class="panel-title">
-                      <!-- collapsed "buttons" (on the right side)--><a data-toggle="collapse" href="#panel_sensors_id_observations" class="block collapsed"><span id="get_sensors_id_observations" class="badge badge_get">get  </span><span class="parent">/sensors/{id}</span>/observations
+                      <!-- collapsed "buttons" (on the right side)--><a data-toggle="collapse" href="#panel_sensors_id_observations" class="block collapsed"><span id="get_sensors_id_observations" class="badge badge_get">get  </span><span id="post_sensors_id_observations" class="badge badge_post">post   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span class="parent">/sensors/{id}</span>/observations
                         </a>
                     </h4>
                   </div>
@@ -194,6 +195,9 @@ Be sure that you are authenticated and you belongs to the same organization as t
                       <!-- extended "buttons" (list)-->
                       <div class="list-group"><a href="#" data-toggle="modal" data-target="#sensors_id_observations_get" class="list-group-item"><span class="badge badge_get">get  </span><span><p>Retrieve the last 1000 observations of a given sensor
 if the sensor is not found or it don’t have any observations the list retrived will be empty</p>
+</span></a><a href="#" data-toggle="modal" data-target="#sensors_id_observations_post" class="list-group-item"><span class="badge badge_post">post   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span><p>Create a new observation for the given sensor
+The timestamp is number of millisec since 1/1/1970 (Java timestamp not Unix timestamp)
+if you using unix timestamp don’t forget to multiply by 1000</p>
 </span></a>
                       </div>
                     </div>
@@ -230,6 +234,53 @@ if the sensor is not found or it don’t have any observations the list retrived
                               <p><strong>Type: application/json</strong></p><strong>Example:</strong>
                               <pre>[{"<span class="hljs-attribute">idObservation</span>": <span class="hljs-value"><span class="hljs-number">11</span></span>, "<span class="hljs-attribute">timestamp</span>": <span class="hljs-value"><span class="hljs-number">1418482448970</span></span>, "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-number">46</span></span>}, {"<span class="hljs-attribute">idObservation</span>": <span class="hljs-value"><span class="hljs-number">12</span></span>, "<span class="hljs-attribute">timestamp</span>": <span class="hljs-value"><span class="hljs-number">1418482458970</span></span>, "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-number">44.9</span></span>}]
 </pre>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="sensors_id_observations_post" class="modal fade">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+                          <h4 class="modal-title"><span class="badge badge_post">post   <i class="glyphicon glyphicon-lock" title="Internal"></i></span>&nbsp;&nbsp;<span class="parent">/sensors/{id}</span>/observations</h4>
+                        </div>
+                        <div class="modal-body">
+                          <!-- Nav tabs-->
+                          <ul class="nav nav-tabs">
+                            <li class="active"><a href="#sensors_id_observations_post_description" data-toggle="tab">Description</a></li>
+                            <li><a href="#sensors_id_observations_post_request" data-toggle="tab">Request</a></li>
+                            <li><a href="#sensors_id_observations_post_response" data-toggle="tab">Response</a></li>
+                          </ul>
+                          <!-- Tab panes-->
+                          <div class="tab-content">
+                            <div id="sensors_id_observations_post_description" class="tab-pane active"><span><p>Create a new observation for the given sensor
+The timestamp is number of millisec since 1/1/1970 (Java timestamp not Unix timestamp)
+if you using unix timestamp don’t forget to multiply by 1000</p>
+</span>
+                            </div>
+                            <div id="sensors_id_observations_post_request" class="tab-pane">
+                              <h3>URI Parameters</h3>
+                              <ul>
+                                <li><strong>id string</strong></li>
+                              </ul>
+                              <h3>Body</h3>
+                              <p><strong>Type: application/json</strong></p><strong>Example:</strong>
+                              <pre>{"<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-number">21.2</span></span>, "<span class="hljs-attribute">timestamp</span>":<span class="hljs-value"><span class="hljs-string">"1418211998000"</span></span>}
+</pre>
+                            </div>
+                            <div id="sensors_id_observations_post_response" class="tab-pane">
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/200" target="_blank">200</a></h2>
+                              <h3>Body</h3>
+                              <p><strong>Type: application/json</strong></p><strong>Example:</strong>
+                              <pre>{"<span class="hljs-attribute">idObservation</span>": <span class="hljs-value"><span class="hljs-number">11</span></span>, "<span class="hljs-attribute">timestamp</span>": <span class="hljs-value"><span class="hljs-number">1418482448970</span></span>, "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-number">46</span></span>}
+</pre>
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/403" target="_blank">403</a></h2><p>You must be authenticated for this action</p>
+
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>the given sensor is not found or the given json is improperly formatted</p>
+
                             </div>
                           </div>
                         </div>
@@ -342,7 +393,7 @@ if the sensor is not found or it don’t have any observations the list retrived
                 <div class="panel panel-white">
                   <div class="panel-heading">
                     <h4 class="panel-title">
-                      <!-- collapsed "buttons" (on the right side)--><a data-toggle="collapse" href="#panel_organisations_id" class="block collapsed"><span id="get_organisations_id" class="badge badge_get">get  </span><span class="parent">/organisations</span>/{id}
+                      <!-- collapsed "buttons" (on the right side)--><a data-toggle="collapse" href="#panel_organisations_id" class="block collapsed"><span id="get_organisations_id" class="badge badge_get">get  </span><span id="put_organisations_id" class="badge badge_put">put   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span id="delete_organisations_id" class="badge badge_delete">delete   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span class="parent">/organisations</span>/{id}
                         </a>
                     </h4>
                   </div>
@@ -350,6 +401,9 @@ if the sensor is not found or it don’t have any observations the list retrived
                     <div class="panel-body">
                       <!-- extended "buttons" (list)-->
                       <div class="list-group"><a href="#" data-toggle="modal" data-target="#organisations_id_get" class="list-group-item"><span class="badge badge_get">get  </span><span><p>Retrieve an organisation</p>
+</span></a><a href="#" data-toggle="modal" data-target="#organisations_id_put" class="list-group-item"><span class="badge badge_put">put   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span><p>Update an existing organisation
+if the organisation don’t have any manager you just need basic authentication else you need to be the manager of the organisation</p>
+</span></a><a href="#" data-toggle="modal" data-target="#organisations_id_delete" class="list-group-item"><span class="badge badge_delete">delete   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span><p>Retrieve organisation</p>
 </span></a>
                       </div>
                     </div>
@@ -391,6 +445,90 @@ if the sensor is not found or it don’t have any observations the list retrived
                       </div>
                     </div>
                   </div>
+                  <div id="organisations_id_put" class="modal fade">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+                          <h4 class="modal-title"><span class="badge badge_put">put   <i class="glyphicon glyphicon-lock" title="Internal"></i></span>&nbsp;&nbsp;<span class="parent">/organisations</span>/{id}</h4>
+                        </div>
+                        <div class="modal-body">
+                          <!-- Nav tabs-->
+                          <ul class="nav nav-tabs">
+                            <li class="active"><a href="#organisations_id_put_description" data-toggle="tab">Description</a></li>
+                            <li><a href="#organisations_id_put_request" data-toggle="tab">Request</a></li>
+                            <li><a href="#organisations_id_put_response" data-toggle="tab">Response</a></li>
+                          </ul>
+                          <!-- Tab panes-->
+                          <div class="tab-content">
+                            <div id="organisations_id_put_description" class="tab-pane active"><span><p>Update an existing organisation
+if the organisation don’t have any manager you just need basic authentication else you need to be the manager of the organisation</p>
+</span>
+                            </div>
+                            <div id="organisations_id_put_request" class="tab-pane">
+                              <h3>URI Parameters</h3>
+                              <ul>
+                                <li><strong>id string</strong></li>
+                              </ul>
+                              <h3>Body</h3>
+                              <p><strong>Type: application/json</strong></p><strong>Example:</strong>
+                              <pre>{"<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"HEIG"</span></span>, "<span class="hljs-attribute">fkManager</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>}
+</pre>
+                            </div>
+                            <div id="organisations_id_put_response" class="tab-pane">
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/204" target="_blank">204</a></h2>
+                              <h3>Body</h3>
+                              <p><strong>Type: application/json</strong></p><strong>Example:</strong>
+                              <pre>{"<span class="hljs-attribute">idOrganisation</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>, "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"HEIG"</span></span>, "<span class="hljs-attribute">fkManager</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>}
+</pre>
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/403" target="_blank">403</a></h2><p>if the organisation don’t have any manager you need basic authentication else you need to be the manager of the organisation</p>
+
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>The given json is improperly formatted</p>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="organisations_id_delete" class="modal fade">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+                          <h4 class="modal-title"><span class="badge badge_delete">delete   <i class="glyphicon glyphicon-lock" title="Internal"></i></span>&nbsp;&nbsp;<span class="parent">/organisations</span>/{id}</h4>
+                        </div>
+                        <div class="modal-body">
+                          <!-- Nav tabs-->
+                          <ul class="nav nav-tabs">
+                            <li class="active"><a href="#organisations_id_delete_description" data-toggle="tab">Description</a></li>
+                            <li><a href="#organisations_id_delete_request" data-toggle="tab">Request</a></li>
+                            <li><a href="#organisations_id_delete_response" data-toggle="tab">Response</a></li>
+                          </ul>
+                          <!-- Tab panes-->
+                          <div class="tab-content">
+                            <div id="organisations_id_delete_description" class="tab-pane active"><span><p>Retrieve organisation</p>
+</span>
+                            </div>
+                            <div id="organisations_id_delete_request" class="tab-pane">
+                              <h3>URI Parameters</h3>
+                              <ul>
+                                <li><strong>id string</strong></li>
+                              </ul>
+                            </div>
+                            <div id="organisations_id_delete_response" class="tab-pane">
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/204" target="_blank">204</a></h2><p>Succesfully deleted resource</p>
+
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/403" target="_blank">403</a></h2><p>you must be authenticated and be the manager of this organisation</p>
+
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>the organisation is not found</p>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="panel panel-white">
                   <div class="panel-heading">
@@ -409,7 +547,7 @@ if the sensor is not found or it don’t have any observations the list retrived
                 <div class="panel panel-white">
                   <div class="panel-heading">
                     <h4 class="panel-title">
-                      <!-- collapsed "buttons" (on the right side)--><a data-toggle="collapse" href="#panel_organisations_organisationId_sensors" class="block collapsed"><span id="get_organisations_organisationId_sensors" class="badge badge_get">get  </span><span class="parent">/organisations/{organisationId}</span>/sensors
+                      <!-- collapsed "buttons" (on the right side)--><a data-toggle="collapse" href="#panel_organisations_organisationId_sensors" class="block collapsed"><span id="get_organisations_organisationId_sensors" class="badge badge_get">get  </span><span id="post_organisations_organisationId_sensors" class="badge badge_post">post   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span class="parent">/organisations/{organisationId}</span>/sensors
                         </a>
                     </h4>
                   </div>
@@ -417,6 +555,7 @@ if the sensor is not found or it don’t have any observations the list retrived
                     <div class="panel-body">
                       <!-- extended "buttons" (list)-->
                       <div class="list-group"><a href="#" data-toggle="modal" data-target="#organisations_organisationId_sensors_get" class="list-group-item"><span class="badge badge_get">get  </span><span><p>Retrieve all sensors witch belong to the given organisation is you are authenticated you retrive private and public sensors</p>
+</span></a><a href="#" data-toggle="modal" data-target="#organisations_organisationId_sensors_post" class="list-group-item"><span class="badge badge_post">post   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span><p>Create a sensor</p>
 </span></a>
                       </div>
                     </div>
@@ -474,18 +613,48 @@ if the sensor is not found or it don’t have any observations the list retrived
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="panel panel-white">
-                  <div class="panel-heading">
-                    <h4 class="panel-title">
-                      <!-- collapsed "buttons" (on the right side)--><a data-toggle="collapse" href="#panel_organisations_organisationId_sensors_sensorId" class="block collapsed"><span class="parent">/organisations/{organisationId}/sensors</span>/{sensorId}
-                        </a>
-                    </h4>
-                  </div>
-                  <div id="panel_organisations_organisationId_sensors_sensorId" class="panel-collapse collapse">
-                    <div class="panel-body">
-                      <!-- extended "buttons" (list)-->
-                      <div class="list-group">
+                  <div id="organisations_organisationId_sensors_post" class="modal fade">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+                          <h4 class="modal-title"><span class="badge badge_post">post   <i class="glyphicon glyphicon-lock" title="Internal"></i></span>&nbsp;&nbsp;<span class="parent">/organisations/{organisationId}</span>/sensors</h4>
+                        </div>
+                        <div class="modal-body">
+                          <!-- Nav tabs-->
+                          <ul class="nav nav-tabs">
+                            <li class="active"><a href="#organisations_organisationId_sensors_post_description" data-toggle="tab">Description</a></li>
+                            <li><a href="#organisations_organisationId_sensors_post_request" data-toggle="tab">Request</a></li>
+                            <li><a href="#organisations_organisationId_sensors_post_response" data-toggle="tab">Response</a></li>
+                          </ul>
+                          <!-- Tab panes-->
+                          <div class="tab-content">
+                            <div id="organisations_organisationId_sensors_post_description" class="tab-pane active"><span><p>Create a sensor</p>
+</span>
+                            </div>
+                            <div id="organisations_organisationId_sensors_post_request" class="tab-pane">
+                              <h3>URI Parameters</h3>
+                              <ul>
+                                <li><strong>organisationId string</strong></li>
+                              </ul>
+                              <h3>Body</h3>
+                              <p><strong>Type: application/json</strong></p><strong>Example:</strong>
+                              <pre>{"<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"temperature sensor"</span></span>, "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"ROOM_1"</span></span>, "<span class="hljs-attribute">type</span>":<span class="hljs-value"><span class="hljs-string">"TEMPERATURE"</span></span>, "<span class="hljs-attribute">isPublic</span>":<span class="hljs-value"><span class="hljs-string">"true"</span> </span>}
+</pre>
+                            </div>
+                            <div id="organisations_organisationId_sensors_post_response" class="tab-pane">
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/201" target="_blank">201</a></h2>
+                              <h3>Body</h3>
+                              <p><strong>Type: application/json</strong></p><strong>Example:</strong>
+                              <pre>{"<span class="hljs-attribute">idSensor</span>": <span class="hljs-value"><span class="hljs-number">53</span></span>, "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"temperature sensor"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"ROOM_1"</span></span>, "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"TEMPERATURE"</span></span>, "<span class="hljs-attribute">isPublic</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>, "<span class="hljs-attribute">fkOrganisation</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>}
+</pre>
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/403" target="_blank">403</a></h2><p>you have to be authenticated and create sensor in your organisation</p>
+
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>The given json is improperly formatted or the organisation is not found</p>
+
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -493,7 +662,150 @@ if the sensor is not found or it don’t have any observations the list retrived
                 <div class="panel panel-white">
                   <div class="panel-heading">
                     <h4 class="panel-title">
-                      <!-- collapsed "buttons" (on the right side)--><a data-toggle="collapse" href="#panel_organisations_organisationId_users" class="block collapsed"><span id="get_organisations_organisationId_users" class="badge badge_get">get  </span><span class="parent">/organisations/{organisationId}</span>/users
+                      <!-- collapsed "buttons" (on the right side)--><a data-toggle="collapse" href="#panel_organisations_organisationId_sensors_sensorId" class="block collapsed"><span id="get_organisations_organisationId_sensors_sensorId" class="badge badge_get">get   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span id="put_organisations_organisationId_sensors_sensorId" class="badge badge_put">put   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span id="delete_organisations_organisationId_sensors_sensorId" class="badge badge_delete">delete   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span class="parent">/organisations/{organisationId}/sensors</span>/{sensorId}
+                        </a>
+                    </h4>
+                  </div>
+                  <div id="panel_organisations_organisationId_sensors_sensorId" class="panel-collapse collapse">
+                    <div class="panel-body">
+                      <!-- extended "buttons" (list)-->
+                      <div class="list-group"><a href="#" data-toggle="modal" data-target="#organisations_organisationId_sensors_sensorId_get" class="list-group-item"><span class="badge badge_get">get   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span><p>Retrieve a sensor</p>
+</span></a><a href="#" data-toggle="modal" data-target="#organisations_organisationId_sensors_sensorId_put" class="list-group-item"><span class="badge badge_put">put   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span><p>Update a sensor</p>
+</span></a><a href="#" data-toggle="modal" data-target="#organisations_organisationId_sensors_sensorId_delete" class="list-group-item"><span class="badge badge_delete">delete   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span><p>delete sensor</p>
+</span></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="organisations_organisationId_sensors_sensorId_get" class="modal fade">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+                          <h4 class="modal-title"><span class="badge badge_get">get   <i class="glyphicon glyphicon-lock" title="Internal"></i></span>&nbsp;&nbsp;<span class="parent">/organisations/{organisationId}/sensors</span>/{sensorId}</h4>
+                        </div>
+                        <div class="modal-body">
+                          <!-- Nav tabs-->
+                          <ul class="nav nav-tabs">
+                            <li class="active"><a href="#organisations_organisationId_sensors_sensorId_get_description" data-toggle="tab">Description</a></li>
+                            <li><a href="#organisations_organisationId_sensors_sensorId_get_request" data-toggle="tab">Request</a></li>
+                            <li><a href="#organisations_organisationId_sensors_sensorId_get_response" data-toggle="tab">Response</a></li>
+                          </ul>
+                          <!-- Tab panes-->
+                          <div class="tab-content">
+                            <div id="organisations_organisationId_sensors_sensorId_get_description" class="tab-pane active"><span><p>Retrieve a sensor</p>
+</span>
+                            </div>
+                            <div id="organisations_organisationId_sensors_sensorId_get_request" class="tab-pane">
+                              <h3>URI Parameters</h3>
+                              <ul>
+                                <li><strong>organisationId string</strong></li>
+                                <li><strong>sensorId string</strong></li>
+                              </ul>
+                            </div>
+                            <div id="organisations_organisationId_sensors_sensorId_get_response" class="tab-pane">
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/200" target="_blank">200</a></h2>
+                              <h3>Body</h3>
+                              <p><strong>Type: application/json</strong></p><strong>Example:</strong>
+                              <pre>{"<span class="hljs-attribute">idSensor</span>": <span class="hljs-value"><span class="hljs-number">53</span></span>, "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"temperature sensor"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"ROOM_1"</span></span>, "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"TEMPERATURE"</span></span>, "<span class="hljs-attribute">isPublic</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>, "<span class="hljs-attribute">fkOrganisation</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>}
+</pre>
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>Sensor not found</p>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="organisations_organisationId_sensors_sensorId_put" class="modal fade">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+                          <h4 class="modal-title"><span class="badge badge_put">put   <i class="glyphicon glyphicon-lock" title="Internal"></i></span>&nbsp;&nbsp;<span class="parent">/organisations/{organisationId}/sensors</span>/{sensorId}</h4>
+                        </div>
+                        <div class="modal-body">
+                          <!-- Nav tabs-->
+                          <ul class="nav nav-tabs">
+                            <li class="active"><a href="#organisations_organisationId_sensors_sensorId_put_description" data-toggle="tab">Description</a></li>
+                            <li><a href="#organisations_organisationId_sensors_sensorId_put_request" data-toggle="tab">Request</a></li>
+                            <li><a href="#organisations_organisationId_sensors_sensorId_put_response" data-toggle="tab">Response</a></li>
+                          </ul>
+                          <!-- Tab panes-->
+                          <div class="tab-content">
+                            <div id="organisations_organisationId_sensors_sensorId_put_description" class="tab-pane active"><span><p>Update a sensor</p>
+</span>
+                            </div>
+                            <div id="organisations_organisationId_sensors_sensorId_put_request" class="tab-pane">
+                              <h3>URI Parameters</h3>
+                              <ul>
+                                <li><strong>organisationId string</strong></li>
+                                <li><strong>sensorId string</strong></li>
+                              </ul>
+                              <h3>Body</h3>
+                              <p><strong>Type: application/json</strong></p><strong>Example:</strong>
+                              <pre>{"<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"temperature sensor"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"ROOM_1"</span></span>, "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"TEMPERATURE"</span></span>, "<span class="hljs-attribute">isPublic</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>}
+</pre>
+                            </div>
+                            <div id="organisations_organisationId_sensors_sensorId_put_response" class="tab-pane">
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/200" target="_blank">200</a></h2>
+                              <h3>Body</h3>
+                              <p><strong>Type: application/json</strong></p><strong>Example:</strong>
+                              <pre>{"<span class="hljs-attribute">idSensor</span>": <span class="hljs-value"><span class="hljs-number">53</span></span>, "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"temperature sensor"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"ROOM_1"</span></span>, "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"TEMPERATURE"</span></span>, "<span class="hljs-attribute">isPublic</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>, "<span class="hljs-attribute">fkOrganisation</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>}
+</pre>
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/403" target="_blank">403</a></h2><p>you have to be authenticated and update a sensor in your organisation</p>
+
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>The given json is improperly formatted or the sensor is not found</p>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="organisations_organisationId_sensors_sensorId_delete" class="modal fade">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+                          <h4 class="modal-title"><span class="badge badge_delete">delete   <i class="glyphicon glyphicon-lock" title="Internal"></i></span>&nbsp;&nbsp;<span class="parent">/organisations/{organisationId}/sensors</span>/{sensorId}</h4>
+                        </div>
+                        <div class="modal-body">
+                          <!-- Nav tabs-->
+                          <ul class="nav nav-tabs">
+                            <li class="active"><a href="#organisations_organisationId_sensors_sensorId_delete_description" data-toggle="tab">Description</a></li>
+                            <li><a href="#organisations_organisationId_sensors_sensorId_delete_request" data-toggle="tab">Request</a></li>
+                            <li><a href="#organisations_organisationId_sensors_sensorId_delete_response" data-toggle="tab">Response</a></li>
+                          </ul>
+                          <!-- Tab panes-->
+                          <div class="tab-content">
+                            <div id="organisations_organisationId_sensors_sensorId_delete_description" class="tab-pane active"><span><p>delete sensor</p>
+</span>
+                            </div>
+                            <div id="organisations_organisationId_sensors_sensorId_delete_request" class="tab-pane">
+                              <h3>URI Parameters</h3>
+                              <ul>
+                                <li><strong>organisationId string</strong></li>
+                                <li><strong>sensorId string</strong></li>
+                              </ul>
+                            </div>
+                            <div id="organisations_organisationId_sensors_sensorId_delete_response" class="tab-pane">
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Succesfully deleted resource</p>
+
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/403" target="_blank">403</a></h2><p>you have to be authenticated and delete a sensor in your organisation</p>
+
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>The sensor is not found</p>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="panel panel-white">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <!-- collapsed "buttons" (on the right side)--><a data-toggle="collapse" href="#panel_organisations_organisationId_users" class="block collapsed"><span id="get_organisations_organisationId_users" class="badge badge_get">get  </span><span id="post_organisations_organisationId_users" class="badge badge_post">post   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span class="parent">/organisations/{organisationId}</span>/users
                         </a>
                     </h4>
                   </div>
@@ -501,6 +813,7 @@ if the sensor is not found or it don’t have any observations the list retrived
                     <div class="panel-body">
                       <!-- extended "buttons" (list)-->
                       <div class="list-group"><a href="#" data-toggle="modal" data-target="#organisations_organisationId_users_get" class="list-group-item"><span class="badge badge_get">get  </span><span><p>Retrieve all users who belong to the given organisation</p>
+</span></a><a href="#" data-toggle="modal" data-target="#organisations_organisationId_users_post" class="list-group-item"><span class="badge badge_post">post   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span><p>Create a user you have to be the manager of the given organisation except if the organisation don’t have any manager</p>
 </span></a>
                       </div>
                     </div>
@@ -559,18 +872,150 @@ if the sensor is not found or it don’t have any observations the list retrived
                       </div>
                     </div>
                   </div>
+                  <div id="organisations_organisationId_users_post" class="modal fade">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+                          <h4 class="modal-title"><span class="badge badge_post">post   <i class="glyphicon glyphicon-lock" title="Internal"></i></span>&nbsp;&nbsp;<span class="parent">/organisations/{organisationId}</span>/users</h4>
+                        </div>
+                        <div class="modal-body">
+                          <!-- Nav tabs-->
+                          <ul class="nav nav-tabs">
+                            <li class="active"><a href="#organisations_organisationId_users_post_description" data-toggle="tab">Description</a></li>
+                            <li><a href="#organisations_organisationId_users_post_request" data-toggle="tab">Request</a></li>
+                            <li><a href="#organisations_organisationId_users_post_response" data-toggle="tab">Response</a></li>
+                          </ul>
+                          <!-- Tab panes-->
+                          <div class="tab-content">
+                            <div id="organisations_organisationId_users_post_description" class="tab-pane active"><span><p>Create a user you have to be the manager of the given organisation except if the organisation don’t have any manager</p>
+</span>
+                            </div>
+                            <div id="organisations_organisationId_users_post_request" class="tab-pane">
+                              <h3>URI Parameters</h3>
+                              <ul>
+                                <li><strong>organisationId string</strong></li>
+                              </ul>
+                              <h3>Body</h3>
+                              <p><strong>Type: application/json</strong></p><strong>Example:</strong>
+                              <pre>{"<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"b@b.com"</span></span>, "<span class="hljs-attribute">firstName</span>": <span class="hljs-value"><span class="hljs-string">"B"</span></span>, "<span class="hljs-attribute">lastName</span>": <span class="hljs-value"><span class="hljs-string">"BB"</span></span>, "<span class="hljs-attribute">password</span>": <span class="hljs-value"><span class="hljs-string">"12345"</span></span>}
+</pre>
+                            </div>
+                            <div id="organisations_organisationId_users_post_response" class="tab-pane">
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/201" target="_blank">201</a></h2>
+                              <h3>Body</h3>
+                              <p><strong>Type: application/json</strong></p><strong>Example:</strong>
+                              <pre><span class="hljs-rules">{<span class="hljs-rule"><span class="hljs-attribute">idUser</span>:<span class="hljs-value"> <span class="hljs-number">2</span>, <span class="hljs-string">"email"</span>: <span class="hljs-string">"b@b.com"</span>, <span class="hljs-string">"firstName"</span>: <span class="hljs-string">"B"</span>, <span class="hljs-string">"lastName"</span>: <span class="hljs-string">"BB"</span></span></span></span>}
+</pre>
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/403" target="_blank">403</a></h2><p>you have to be the manager of the given organisation</p>
+
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>The given json is improperly formatted or the organisation is not found</p>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 <div class="panel panel-white">
                   <div class="panel-heading">
                     <h4 class="panel-title">
-                      <!-- collapsed "buttons" (on the right side)--><a data-toggle="collapse" href="#panel_organisations_organisationId_users_id" class="block collapsed"><span class="parent">/organisations/{organisationId}/users</span>/{id}
+                      <!-- collapsed "buttons" (on the right side)--><a data-toggle="collapse" href="#panel_organisations_organisationId_users_id" class="block collapsed"><span id="put_organisations_organisationId_users_id" class="badge badge_put">put   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span id="delete_organisations_organisationId_users_id" class="badge badge_delete">delete   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span class="parent">/organisations/{organisationId}/users</span>/{id}
                         </a>
                     </h4>
                   </div>
                   <div id="panel_organisations_organisationId_users_id" class="panel-collapse collapse">
                     <div class="panel-body">
                       <!-- extended "buttons" (list)-->
-                      <div class="list-group">
+                      <div class="list-group"><a href="#" data-toggle="modal" data-target="#organisations_organisationId_users_id_put" class="list-group-item"><span class="badge badge_put">put   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span><p><p>Update a user</p>
+</span></a><a href="#" data-toggle="modal" data-target="#organisations_organisationId_users_id_delete" class="list-group-item"><span class="badge badge_delete">delete   <i class="glyphicon glyphicon-lock" title="Internal"></i></span><span><p>delete user you have to be the manager of the given user</p>
+</span></a>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="organisations_organisationId_users_id_put" class="modal fade">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+                          <h4 class="modal-title"><span class="badge badge_put">put   <i class="glyphicon glyphicon-lock" title="Internal"></i></span>&nbsp;&nbsp;<span class="parent">/organisations/{organisationId}/users</span>/{id}</h4>
+                        </div>
+                        <div class="modal-body">
+                          <!-- Nav tabs-->
+                          <ul class="nav nav-tabs">
+                            <li class="active"><a href="#organisations_organisationId_users_id_put_description" data-toggle="tab">Description</a></li>
+                            <li><a href="#organisations_organisationId_users_id_put_request" data-toggle="tab">Request</a></li>
+                            <li><a href="#organisations_organisationId_users_id_put_response" data-toggle="tab">Response</a></li>
+                          </ul>
+                          <!-- Tab panes-->
+                          <div class="tab-content">
+                            <div id="organisations_organisationId_users_id_put_description" class="tab-pane active"><span><p>Update a user. You have to be the given user or the manager of the organisation</p>
+</span>
+                            </div>
+                            <div id="organisations_organisationId_users_id_put_request" class="tab-pane">
+                              <h3>URI Parameters</h3>
+                              <ul>
+                                <li><strong>organisationId string</strong></li>
+                                <li><strong>id string</strong></li>
+                              </ul>
+                              <h3>Body</h3>
+                              <p><strong>Type: application/json</strong></p><strong>Example:</strong>
+                              <pre>{"<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"b@b.com"</span></span>, "<span class="hljs-attribute">firstName</span>": <span class="hljs-value"><span class="hljs-string">"B"</span></span>, "<span class="hljs-attribute">lastName</span>": <span class="hljs-value"><span class="hljs-string">"BB"</span></span>, "<span class="hljs-attribute">password</span>": <span class="hljs-value"><span class="hljs-string">"12345"</span></span>}
+</pre>
+                            </div>
+                            <div id="organisations_organisationId_users_id_put_response" class="tab-pane">
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/200" target="_blank">200</a></h2>
+                              <h3>Body</h3>
+                              <p><strong>Type: application/json</strong></p><strong>Example:</strong>
+                              <pre><span class="hljs-rules">{<span class="hljs-rule"><span class="hljs-attribute">idUser</span>:<span class="hljs-value"> <span class="hljs-number">2</span>, <span class="hljs-string">"email"</span>: <span class="hljs-string">"b@b.com"</span>, <span class="hljs-string">"firstName"</span>: <span class="hljs-string">"B"</span>, <span class="hljs-string">"lastName"</span>: <span class="hljs-string">"BB"</span></span></span></span>}
+</pre>
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/403" target="_blank">403</a></h2><p>You have to be the given user or the manager of the organisation</p>
+
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>The given json is improperly formatted or the organisation/user is not found</p>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="organisations_organisationId_users_id_delete" class="modal fade">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+                          <h4 class="modal-title"><span class="badge badge_delete">delete   <i class="glyphicon glyphicon-lock" title="Internal"></i></span>&nbsp;&nbsp;<span class="parent">/organisations/{organisationId}/users</span>/{id}</h4>
+                        </div>
+                        <div class="modal-body">
+                          <!-- Nav tabs-->
+                          <ul class="nav nav-tabs">
+                            <li class="active"><a href="#organisations_organisationId_users_id_delete_description" data-toggle="tab">Description</a></li>
+                            <li><a href="#organisations_organisationId_users_id_delete_request" data-toggle="tab">Request</a></li>
+                            <li><a href="#organisations_organisationId_users_id_delete_response" data-toggle="tab">Response</a></li>
+                          </ul>
+                          <!-- Tab panes-->
+                          <div class="tab-content">
+                            <div id="organisations_organisationId_users_id_delete_description" class="tab-pane active"><span><p>delete user you have to be the manager of the given user</p>
+</span>
+                            </div>
+                            <div id="organisations_organisationId_users_id_delete_request" class="tab-pane">
+                              <h3>URI Parameters</h3>
+                              <ul>
+                                <li><strong>organisationId string</strong></li>
+                                <li><strong>id string</strong></li>
+                              </ul>
+                            </div>
+                            <div id="organisations_organisationId_users_id_delete_response" class="tab-pane">
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/200" target="_blank">200</a></h2><p>Succesfully deleted resource</p>
+
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/403" target="_blank">403</a></h2><p>you have to be the manager of the given user</p>
+
+                              <h2>HTTP status code&nbsp;<a href="http://httpstatus.es/404" target="_blank">404</a></h2><p>The user is not found</p>
+
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -733,7 +1178,7 @@ you have to send a date variable in the URL with the formatted date “dd-MM-yyy
     <div class="footer">
       <div class="container">
         <p><a href="https://github.com/lotaris/apidoc-seed">apidoc-seed</a>&nbsp;- An API documentation project using Grunt, Metalsmith and RAML.</p>
-        <p>Version: 0.0.1  |  Built December 15, 2014 1:07 AM</p>
+        <p>Version: 0.0.1  |  Built December 15, 2014 1:10 AM</p>
       </div>
     </div>
     <script type="text/javascript" src="/amt_project1/js/global.js"></script>
