@@ -95,13 +95,83 @@ Etre capable d'illustrer le principe de DTO et l'avantage avec un exemple concre
 ##Création API REST
 Etre capable de décrire les URLs, les méthodes HTTP, les payloads et de décrire la sémantique associée.
 
+Lors de la conception d'une API REST, il faut réfléchir en terme de **ressources**. Quelles sont les entités (ressources) que l'on veut rendre accessible aux utilisateurs et sous quelles conditions ? Un utilisateur est une ressource, toute personne peut en créer une mais seule celle qui y est associée peut accéder aux informations. Il y a donc un travail de logique à effectuer par rapport aux ressources et à l'action que l'on cherche à effectuer.
+
+###Ressources
+Peut être défini à l'aide d'un modèle de domaine. Les ressources de notre application sont les éléments métiers de cette dernière, le résultat de ses fonctionnalités. Ainsi il assez logique d'imaginer qu'une application permettant de concevoir des albums photos disposera d'une ressource "images" et d'une ressource "albums". La liaison entre ces entités est également évidente.  
+
+Afin de disposer de ces informations, REST impose une identification unique de chaque ressource dans un format standart (génlralement une URL), cet ressource particulière peut cependant disposer de plusieurs représentations (XML, JSON). L'interraction doit par contre ce faire à l'aide d'une interface unique (requêtes HTTP).  
+
+####Exemple:
+
+```/api/users/``` : Liste des utilisateurs  
+```/api/users/:id/commandes``` : Liste des commandes pour tel utilisateur (*:id* = Identifiant utilisateur)   
+```/api/commande/:id/produits?number=20&start=0``` : Les 20 premiers produits de telle commande (*:id* = Identifiant de la commande)
+
+###CRUD
+Acronyme des actions de base que l'on peut utiliser sur des ressources:
+
+- **C**reate: Création d'une nouvelle ressource
+- **R**ead: Lecture de la(des) ressource(s) existante(s)
+- **U**pdate: Mise à jour d'une ressource existante
+- **D**elete: Suppression d'une ressource existante
+
+Si ```/api/users/1``` est l'identifiant unique de l'utilisateur à l'id 1, il va falloir trouver un moyen d'indiquer ce que l'on cherche à faire sur cette ressource (lecture, modification ou suppression).  
+
+C'est la que les requêtes HTTP entrent en jeu:  
+
+- **C**reate: POST
+- **R**ead: GET / HEAD / OPTIONS
+- **U**pdate: PUT / PATCH
+- **D**elete: DELETE
+
+Chacune réalisant alors l'opération demandée et/ou générant une réponse à la requête.  
+ 
+Il nous faut encore ajouter à cela une notion d'autorisations, il n'est pas concevable d'offrir la possibilité à n'importe qui d'afficher la liste des utisateurs et encore moins leurs informations, ni de créer des commandes pour un autre utilisateur.  
+Ainsi, lors de la création de l'API ces options doivent être spécifiquement indiquées pour toute requête vers une ressource spécifique.
+
+####Exemple
+```/api/users/me```: Information sur l'utilisateur actuellement connecté => **Utilisateur courant**.   
+```/api/users/:id```: Information sur un utilisateur en particulier => **Admin**.   
+```/api/users/:id/commandes```: Information sur les commandes de l'utilisateur actuellement connecté => **Utilisateur courant** & **Admin**.   
+
+
 ##JPA
 Implémenter la persistence dans une application multi-tiers (bien décrire toutes les étapes, avec la phase de définition du modèle et la phase d'utilisation du service de persistence, cf. slides).
 
 ##Différence entre le "eager loading" et le "lazy loading"
-Etre capable de l'expliquer avec un exemple (inspiré du projet).
+Etre capable de l'expliquer avec un exemple (inspiré du projet).  
+
+Lorsque l'on crée une jointure, un objet **a** peut être lié à n objets **b** (OneToMany). Si l'on récupère l'objet **a**, nous n'avons pas forcément besoin de tout les objets **b** liés (par exemple un utilisateur et sa liste de commandes passées).  
+
+Le **Lazy loading** répondra parfaitement à cette problématique, si une jointure est définie comme ***Lazy***, l'appel d'un objet ne chargera ses objets liés uniquement en cas de demande spécifique (via getObjetsLies() par exemple). Cette option économise donc beaucoup de ressources.  
+
+Le **Eager loading**, à l'inverse, chargera en cascade tout les objets joints (la cascade bien sur ne s'étendra qu'aux sous-jointures également définie comme étant ***Eager***), le chargement sera alors plus lourd mais les objets persistés seront alors tous instanciés. Cela est particulièrement utile si une entité n'a pas de raison d'être sans un élément joint comme par exemple un *type de compte* pour un *compte*.
+
+####Exemple dans le projet:
+Observation.java  
+
+```
+//Une observation n'a aucun sens si on ne sait pas à quel Sensor elle est liée.
+@ManyToOne(fetch = FetchType.EAGER)
+@JoinColumn(nullable = false)
+private Sensor sensor;
+```
 
 ##Maven
+**Apache Maven** est un outil pour la gestion et l'automatisation de production des projets logiciels Java en général et Java EE en particulier. Maven permet principalement de gérer les dépendances des projet en téléchargeant du matériel sur des dépôts logiciels connus. Il propose ainsi la synchronisation transparente de modules nécessaires.  
+Maven utilise un paradigme connu sous le nom de Project Object Model (POM) afin de décrire un projet logiciel, ses dépendances avec des modules externes et l'ordre à suivre pour sa production.  
+
+####Cycle de vie
+Les buts principaux du cycle de vie d'un projet Maven sont:
+
+- compile
+- test
+- package
+- install
+- deploy
+
+L'idée est que, pour n'importe quel but, tous les buts en amont doivent être exécutés sauf s'ils ont déjà été exécutés avec succès et qu'aucun changement n'a été fait dans le projet depuis. Par exemple, quand on exécute ```mvn install```, Maven va vérifier que ```mvn package``` s'est terminé avec succès (le jar existe dans target/), auquel cas cela ne sera pas ré-exécuté.
 
 ##Injection de dépendance JPA
 ```
