@@ -153,57 +153,60 @@ La Java Persistence API (abrégée en JPA), est une interface de programmation J
 Un provider de persistance est une implémentation de JPA API. EclipseLink et Hibernate sont 2 example de provider. EclipseLink est celui inclu dans netbeans. Il est possible d'utiliser plusieurs provider au sein d'un meme projet
 
 ###JPA entité
-les entitées JPA sont des POJO elles ont donc pas besoin d'hériter ou d'implémenter une interface particulière. Une entitée JPA représente une table dans la base de donnée chaque atribut de l'entitée représente un champs dans cette table.
+Les entités JPA sont des POJO, elles n'ont donc pas besoin d'hériter ou d'implémenter une interface particulière. Une entité JPA représente une table dans la base de donnée chaque atribut de l'entitée représente un champs dans cette table.
 
-Prerequi pour une entité JPA
-- il faut rajouter le tag @ENTITY au dessus de la declaration de la class
-- il doit avoir un constructeur public sans argument
-- devrait implémenter Serializable  
+Prérequis pour une entité JPA :
 
-Quelque tag util pour la creation d'entitée
+- Il faut rajouter le tag @ENTITY au dessus de la déclaration de la classe
+- Il doit y avoir un constructeur public sans argument
+- Devrait implémenter Serializable
 
-Si le nom de la classe est un mot reserver du langage SQL comme par exemple "user" il faut rajouter le tag @TABLE(name="USER_TABLE") se qui autra pour effet de nomer la table USER_TABLE au lieu de user.
+Quelques tags utiles pour la création d'entités:
 
-La définition de la clé primaire se fait grace au tag @ID pour mettre l'id en auto increment il faut rajouter le tag @GeneratedValue(strategy = GenerationType.AUTO)
+- **@TABLE(name="USER_TABLE")** Si le nom de la classe est un mot reservé du langage SQL comme par exemple "***user***" il faut rajouter ce tag. Ainsi, la table sera nommé ***USER_TABLE*** au lieu de ***user***.
+- **@ID** Défini la clé primaire. Si l'on souhaite déclarer l'id en auto increment on peut églalement ajouter le tag **@GeneratedValue(strategy = GenerationType.AUTO)**.
+- **@Column(name="VALUE_OBSERVATION")** Permet de forcer le nom d'un champ si un attribus est un mot reservé du langage sql.
+- **@Temporal(TemporalType.TIMESTAMP)** Déclare un champ Date. 
 
-Si un atribut est un mot reserver du langage sql il faut rajouter le tag @Column(name="VALUE_OBSERVATION")
-
-La gestion des dates se fait grace au tag @Temporal(TemporalType.TIMESTAMP)
-
-il est possible de définir des requetes (NamedQueries) pour notre entité. Ces requtes s'écrivent en JPQL
-example
+Il est possible de définir des requêtes (NamedQueries) pour nos entités.  
+Ces requêtes s'écrivent en JPQL:
+  
 ```
 @Entity
 @NamedQueries({
     @NamedQuery(
             name = "findLast1000Observation",
-            query = "SELECT o FROM Observation o WHERE o.sensor.idSensor = :idSensor"
+            maQuery = "SELECT o FROM Observation o WHERE o.sensor.idSensor = :idSensor"
     )
 })
 ```
 ###Entity Manager
-L'entity manager est l'interface du service de persistence. C'est donc via l'entity manager qu'il est possible de retrouver, cherger, modifié et supprimer des données dans la base de données
+L'entity manager est l'interface du service de persistence. C'est donc via l'entity manager qu'il est possible de retrouver, charger, modifier et supprimer des données dans la base de données.
 
-Dans un EJB on peut récupérer l'entity manager avec une injection de référence grace au tag @PersistenceContext
-voici quelle que example :
+Dans un EJB on peut récupérer l'entity manager avec une injection de référence grâce au tag **@PersistenceContext**.
+
 ```
 @PersistenceContext
 EntityManger em;
 
-em.persist(obj) //insert into
-em.flush() //force la sinchronisation avec la db (il faut toujours le faire apres un persist)
-em.merge(obj) // update
-em.delete(obj) //delete
-em.find(maClass.class, id) // select * from maClass where id=id;
-em.createNamedQuerey("maQuery").setParameter("para", obj).getResultList() // execute la requete JPQL maQuery
+em.persist(obj) // INSERT INTO
+em.flush() //Force la synchronisation avec la BDD (il faut toujours le faire apres un persist)
+em.merge(obj) // Update
+em.delete(obj) // Delete
+em.find(maClass.class, id) // SELECT * FROM maClass WHERE id=id;
+
+// Éxécute la requete JPQL maQuery, précédemment définie
+em.createNamedQuerey("maQuery").setParameter("para", obj).getResultList();
 ```
 
-###Le context de persistence
-Le context de persistence est une collection d'entité à l'execution. C'est un grand sac d'objet que provient de la base de données qui sont gérer par JPA et qui repasseront dans la DB a un moment ou un autre. Si une modification est faite sur l'une de ces entitées il n'est pas nécessaire de les sauvgarder, se sera fait automatiquement lors du commit.
-cycle de vie du contex de persistance
-- une nouvelle instance d'une entité n'est pas encore associé au context de persistance
-- instance d'une entité (managed) est associer au contexe de persistance
-- instance d'une entité (detached) n'est plus lié au contexte de percistance cela se produit quand sela se produit quand un EJB retourne l'entité à une servlette ou à l'api rest
+###Le contexte de persistance
+Le contexte de persistance est une collection d'entités à l'execution. C'est un grand sac d'objets qui provient de la base de données et qui sont gérés par JPA et qui repasseront dans la DB a un moment ou un autre. Si une modification est faite sur l'une de ces entités, il n'est pas nécessaire de les sauvegarder, cela sera fait automatiquement lors du commit.  
+
+Cycle de vie du contexte de persistance :
+
+- Une nouvelle instance d'une entité n'est pas encore associée au contexte de persistance.
+- Instance d'une entité (managed) est associée au contexe de persistance.
+- Instance d'une entité (detached) n'est plus liée au contexte de persistance. Cela ce produit quand un EJB retourne une entité à une servlet ou à l'API REST.
 
 
 ##Différence entre le "eager loading" et le "lazy loading"
