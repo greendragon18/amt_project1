@@ -147,6 +147,65 @@ Ainsi, lors de la création de l'API ces options doivent être spécifiquement i
 ##JPA
 Implémenter la persistence dans une application multi-tiers (bien décrire toutes les étapes, avec la phase de définition du modèle et la phase d'utilisation du service de persistence, cf. slides).
 
+La Java Persistence API (abrégée en JPA), est une interface de programmation Java permettant aux développeurs d'organiser des données relationnelles dans des applications utilisant la plateforme Java.
+
+###Provider de persistance
+Un provider de persistance est une implémentation de JPA API. EclipseLink et Hibernate sont 2 example de provider. EclipseLink est celui inclu dans netbeans. Il est possible d'utiliser plusieurs provider au sein d'un meme projet
+
+###JPA entité
+les entitées JPA sont des POJO elles ont donc pas besoin d'hériter ou d'implémenter une interface particulière. Une entitée JPA représente une table dans la base de donnée chaque atribut de l'entitée représente un champs dans cette table.
+
+Prerequi pour une entité JPA
+- il faut rajouter le tag @ENTITY au dessus de la declaration de la class
+- il doit avoir un constructeur public sans argument
+- devrait implémenter Serializable  
+
+Quelque tag util pour la creation d'entitée
+
+Si le nom de la classe est un mot reserver du langage SQL comme par exemple "user" il faut rajouter le tag @TABLE(name="USER_TABLE") se qui autra pour effet de nomer la table USER_TABLE au lieu de user.
+
+La définition de la clé primaire se fait grace au tag @ID pour mettre l'id en auto increment il faut rajouter le tag @GeneratedValue(strategy = GenerationType.AUTO)
+
+Si un atribut est un mot reserver du langage sql il faut rajouter le tag @Column(name="VALUE_OBSERVATION")
+
+La gestion des dates se fait grace au tag @Temporal(TemporalType.TIMESTAMP)
+
+il est possible de définir des requetes (NamedQueries) pour notre entité. Ces requtes s'écrivent en JPQL
+example
+```
+@Entity
+@NamedQueries({
+    @NamedQuery(
+            name = "findLast1000Observation",
+            query = "SELECT o FROM Observation o WHERE o.sensor.idSensor = :idSensor"
+    )
+})
+```
+###Entity Manager
+L'entity manager est l'interface du service de persistence. C'est donc via l'entity manager qu'il est possible de retrouver, cherger, modifié et supprimer des données dans la base de données
+
+Dans un EJB on peut récupérer l'entity manager avec une injection de référence grace au tag @PersistenceContext
+voici quelle que example :
+```
+@PersistenceContext
+EntityManger em;
+
+em.persist(obj) //insert into
+em.flush() //force la sinchronisation avec la db (il faut toujours le faire apres un persist)
+em.merge(obj) // update
+em.delete(obj) //delete
+em.find(maClass.class, id) // select * from maClass where id=id;
+em.createNamedQuerey("maQuery").setParameter("para", obj).getResultList() // execute la requete JPQL maQuery
+```
+
+###Le context de persistence
+Le context de persistence est une collection d'entité à l'execution. C'est un grand sac d'objet que provient de la base de données qui sont gérer par JPA et qui repasseront dans la DB a un moment ou un autre. Si une modification est faite sur l'une de ces entitées il n'est pas nécessaire de les sauvgarder, se sera fait automatiquement lors du commit.
+cycle de vie du contex de persistance
+- une nouvelle instance d'une entité n'est pas encore associé au context de persistance
+- instance d'une entité (managed) est associer au contexe de persistance
+- instance d'une entité (detached) n'est plus lié au contexte de percistance cela se produit quand sela se produit quand un EJB retourne l'entité à une servlette ou à l'api rest
+
+
 ##Différence entre le "eager loading" et le "lazy loading"
 Etre capable de l'expliquer avec un exemple (inspiré du projet).  
 
