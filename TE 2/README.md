@@ -89,16 +89,16 @@ Le **stub** est le bout client d'une relation. Il est en soit identique au skele
 Logiquement, le **stub** n'implémente pas forcément toutes les méthodes du skeleton mais seule celle qu'il référence seront disponible du point de vue du client.
 
 ##Data Transfer Object (DTO)
-Avantage d'introduire ce type de composant
-Etre capable d'illustrer le principe de DTO et l'avantage avec un exemple concret et détaillé.
+Un DTO est un POJO. Il permet de filtrer les informations des entités données aux clients. En résumé, un client ne manipule jamais un POJO entité mais un DTO. Il est possible d'avoir plusieurs DTO pour une entitée.  
+Par exemple, si l'on prend une entité **employe** qui posède un champ salaire et un champ password, il est possible de créer :  
 
-Un DTO est un POJO. Il permet de filtrer les informations des entités données aux clients. En gors un client ne manipule jamais un pojo entité mais un DTO. Il est possible d'avoir plusieurs DTO pour une entitée. Par exemple si l'on prends une entité employer qui posède parmis ses champs un champ salaire et un champ mot de pass. Il est possible de créer :
-- Un DTO avec tous les champs d'emplyer à l'excéption de salaire. Ce DTO serai à disposition de l'emplyer en question anici qu'aux techniciens de l'entreprise.
-- Un DTO avec tous les champs à l'exception du mot de pass destiné aux RH de l'entreprise.  
+- Un DTO avec tous les champs d'employe à l'excéption de salaire, l'intention de l'employé en question ainsi qu'aux techniciens de l'entreprise.
+- Un DTO avec tous les champs à l'exception du mot de passe, destiné aux RH de l'entreprise.  
 
-Dans les pojos d'entitées les relations sont reprsentées de tell sorte : entité A possède une liste d'objet B / un objet B ceci a une certaine lourdeur. Le DTO permet de ne pas transférer les sous objets complets mais de donnée que les clés étrangères. Par exemple dans le cadre de notre projet un sensor appartient à une organisation. Se qui veut dire que dans notre POJO sensor il existe un POJO organisation. grace au DTO quand un client demande un sensor il ne récupère que l'id de l'organisation et non l'organisation au complet. Si il a besion de connaitre l'organisation il pourra refaire une demande sur api REST.  
+Dans les POJOs d'entités, les relations sont reprsentées de telle sorte : entité A possède un ou plusieurs objet(s) B. Charger tout ces éléments a une certaine lourdeur. Le DTO permet de ne pas transférer les sous-objets complètement mais de retourner que les clefs étrangères.  
+Par exemple, dans le cadre de notre projet un Sensor appartient à une organisation. Ce qui veut dire que dans notre POJO Sensor il existe un objet Organisation. Grâce au DTO, quand un client demande un Sensor, il ne récupère que l'ID de l'organisation et non l'organisation au complet (si il a besoin de cette information, il pourra refaire une demande sur l'API REST).  
 
-Le DTO permet de formater des objets et de les convertir. Dans le cadre de notre projet nous avons utilisé un DTO pour transformer une date en un Long (timestamp) ou en string (date formaté) 
+Le DTO permet encore de formater des objets et de les convertir. Dans le cadre de notre projet nous avons utilisé un DTO pour transformer une date en un Long (timestamp) ou en String (date formatée).
 
 ##Création API REST
 Etre capable de décrire les URLs, les méthodes HTTP, les payloads et de décrire la sémantique associée.
