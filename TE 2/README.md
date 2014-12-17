@@ -92,6 +92,14 @@ Logiquement, le **stub** n'implémente pas forcément toutes les méthodes du sk
 Avantage d'introduire ce type de composant
 Etre capable d'illustrer le principe de DTO et l'avantage avec un exemple concret et détaillé.
 
+Un DTO est un POJO. Il permet de filtrer les informations des entités données aux clients. En gors un client ne manipule jamais un pojo entité mais un DTO. Il est possible d'avoir plusieurs DTO pour une entitée. Par exemple si l'on prends une entité employer qui posède parmis ses champs un champ salaire et un champ mot de pass. Il est possible de créer :
+- Un DTO avec tous les champs d'emplyer à l'excéption de salaire. Ce DTO serai à disposition de l'emplyer en question anici qu'aux techniciens de l'entreprise.
+- Un DTO avec tous les champs à l'exception du mot de pass destiné aux RH de l'entreprise.  
+
+Dans les pojos d'entitées les relations sont reprsentées de tell sorte : entité A possède une liste d'objet B / un objet B ceci a une certaine lourdeur. Le DTO permet de ne pas transférer les sous objets complets mais de donnée que les clés étrangères. Par exemple dans le cadre de notre projet un sensor appartient à une organisation. Se qui veut dire que dans notre POJO sensor il existe un POJO organisation. grace au DTO quand un client demande un sensor il ne récupère que l'id de l'organisation et non l'organisation au complet. Si il a besion de connaitre l'organisation il pourra refaire une demande sur api REST.  
+
+Le DTO permet de formater des objets et de les convertir. Dans le cadre de notre projet nous avons utilisé un DTO pour transformer une date en un Long (timestamp) ou en string (date formaté) 
+
 ##Création API REST
 Etre capable de décrire les URLs, les méthodes HTTP, les payloads et de décrire la sémantique associée.
 
