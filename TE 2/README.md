@@ -145,14 +145,12 @@ Ainsi, lors de la création de l'API ces options doivent être spécifiquement i
 
 
 ##JPA
-Implémenter la persistence dans une application multi-tiers (bien décrire toutes les étapes, avec la phase de définition du modèle et la phase d'utilisation du service de persistence, cf. slides).
-
-La Java Persistence API (abrégée en JPA), est une interface de programmation Java permettant aux développeurs d'organiser des données relationnelles dans des applications utilisant la plateforme Java.
+La Java Persistence API (abrégé JPA), est une interface de programmation Java permettant aux développeurs d'organiser des données relationnelles dans des applications utilisant la plateforme Java.
 
 ###Provider de persistance
 Un provider de persistance est une implémentation de JPA API. EclipseLink et Hibernate sont 2 example de provider. EclipseLink est celui inclu dans netbeans. Il est possible d'utiliser plusieurs provider au sein d'un meme projet
 
-###JPA entité
+###Entité JPA
 Les entités JPA sont des POJO, elles n'ont donc pas besoin d'hériter ou d'implémenter une interface particulière. Une entité JPA représente une table dans la base de donnée chaque atribut de l'entitée représente un champs dans cette table.
 
 Prérequis pour une entité JPA :
