@@ -173,8 +173,8 @@ Ces requêtes s'écrivent en JPQL:
 @Entity
 @NamedQueries({
     @NamedQuery(
-            name = "findLast1000Observation",
-            maQuery = "SELECT o FROM Observation o WHERE o.sensor.idSensor = :idSensor"
+            name = "maQuery",
+            query = "SELECT o FROM Observation o WHERE o.sensor.idSensor = :idSensor"
     )
 })
 ```
@@ -191,10 +191,10 @@ em.persist(obj) // INSERT INTO
 em.flush() //Force la synchronisation avec la BDD (il faut toujours le faire apres un persist)
 em.merge(obj) // Update
 em.delete(obj) // Delete
-em.find(maClass.class, id) // SELECT * FROM maClass WHERE id=id;
+em.find(Sensor.class, id) // SELECT * FROM sensors WHERE id=id;
 
 // Éxécute la requete JPQL maQuery, précédemment définie
-em.createNamedQuerey("maQuery").setParameter("para", obj).getResultList();
+em.createNamedQuerey("maQuery").setParameter("para", obj.getId()).getResultList();
 ```
 
 ###Le contexte de persistance
