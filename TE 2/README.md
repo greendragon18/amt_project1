@@ -233,11 +233,14 @@ Maven utilise un paradigme connu sous le nom de Project Object Model (POM) afin 
 ####Cycle de vie
 Les buts principaux du cycle de vie d'un projet Maven sont:
 
-- compile
-- test
-- package
-- install
-- deploy
+- *validate* : Valide le code source.
+- **compile** : Compile le code source du projet.
+- **test** : Test le code compiler grace à un framework de tests compatible.
+- **package** : Crée une version distribuable du code compilé (.jar)
+- *integration-test* : déploie le code dans un environnement particulier pour des tests spécifiques.
+- *verify* : Vérifie que le paquet est valide et répond aux critère de qualité.
+- **install** : Installe le paquet dans un dépot local pour pouvoir être utilisé comme dépendance sur d'autres projets.
+- **deploy** : Effectue une intégration dans un environement de production et push dans le dépôt distant.
 
 L'idée est que, pour n'importe quel but, tous les buts en amont doivent être exécutés sauf s'ils ont déjà été exécutés avec succès et qu'aucun changement n'a été fait dans le projet depuis. Par exemple, quand on exécute ```mvn install```, Maven va vérifier que ```mvn package``` s'est terminé avec succès (le jar existe dans target/), auquel cas cela ne sera pas ré-exécuté.
 
