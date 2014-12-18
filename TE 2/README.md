@@ -194,7 +194,7 @@ em.delete(obj) // Delete
 em.find(Sensor.class, id) // SELECT * FROM sensors WHERE id=id;
 
 // Éxécute la requete JPQL maQuery, précédemment définie
-em.createNamedQuerey("maQuery").setParameter("para", obj.getId()).getResultList();
+em.createNamedQuerey("maQuery").setParameter("idSensor", obj.getId()).getResultList();
 ```
 
 ###Le contexte de persistance
