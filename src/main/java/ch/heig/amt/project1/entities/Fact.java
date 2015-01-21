@@ -41,6 +41,8 @@ public abstract class Fact implements Serializable{
     private Boolean isPublic;
     @Column(nullable = false)
     private String type;
+    @Version
+    Long version;
     
     
     @ManyToOne(fetch = FetchType.LAZY)
