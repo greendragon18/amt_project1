@@ -96,7 +96,7 @@ public class SensorResource {
         try {
             Observation observation = observationDao.dtoToNewEntity(observationDTO, id);
             observationDao.create(observation);
-            observationFlowFactProcessor.processCounterFact(observation);
+//            observationFlowFactProcessor.processCounterFact(observation);
             observationFlowFactProcessor.processDailyStatFact(observation);
 
             return observationDao.entityToDTO(observation);

@@ -30,11 +30,6 @@ import javax.persistence.TemporalType;
             query = "SELECT d FROM DailyStatFact d WHERE d.idSensor = :idSensor AND d.date = :date"
     ),
     @NamedQuery(
-            name = "findDailyStatByIdSensorAndDateForUpdate",
-            query = "SELECT d FROM DailyStatFact d WHERE d.idSensor = :idSensor AND d.date = :date",
-            lockMode = PESSIMISTIC_WRITE
-    ),
-    @NamedQuery(
             name = "findDailyStatByDate",
             query = "SELECT d FROM DailyStatFact d WHERE d.date = :date"
     ),

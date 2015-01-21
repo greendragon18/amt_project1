@@ -26,11 +26,6 @@ import javax.persistence.PrimaryKeyJoinColumn;
             query = "SELECT c FROM CounterFact c WHERE c.idSensor = :idSensor"
     ),
     @NamedQuery(
-            name = "findCounterByIdSensorForUpdate",
-            query = "SELECT c FROM CounterFact c WHERE c.idSensor = :idSensor",
-            lockMode = PESSIMISTIC_WRITE
-    ),
-    @NamedQuery(
             name = "findAllCounter",
             query = "SELECT c FROM CounterFact c"
     )

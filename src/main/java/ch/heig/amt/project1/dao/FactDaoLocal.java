@@ -9,8 +9,8 @@ import ch.heig.amt.project1.dto.FactDTO;
 import ch.heig.amt.project1.entities.Fact;
 import java.util.Date;
 import java.util.List;
+import javax.ejb.EJBException;
 import javax.ejb.Local;
-import javax.persistence.OptimisticLockException;
 
 /**
  *
@@ -21,7 +21,7 @@ public interface FactDaoLocal {
 
     public void create(Fact fact);
 
-    public void update(Fact fact);
+    public void update(Fact fact) throws EJBException;
 
     public void delete(Fact fact);
 
@@ -40,9 +40,5 @@ public interface FactDaoLocal {
     public List<Fact> findAllCounter();
 
     public List<Fact> findAll();
-
-    public Fact findCounterByIdSensorForUpdate(Long idSensor);
-
-    public Fact findDailyStatByIdSensorAndDateForUpdate(Long idSensor, Date date);
     
 }

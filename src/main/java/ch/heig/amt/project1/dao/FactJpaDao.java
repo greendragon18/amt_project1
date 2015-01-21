@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.logging.Logger;
+import javax.ejb.EJBException;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.OptimisticLockException;
@@ -43,8 +44,15 @@ public class FactJpaDao implements FactDaoLocal {
     }
 
     @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void update(Fact fact){
-        em.merge(fact); 
+        try{
+            LOG.info("TRY TO UPDATE FACT");
+            em.merge(fact);
+        }catch(OptimisticLockException e){
+            LOG.info("Cannot update fact");
+            throw new EJBException(e);
+        }
     }
 
     @Override
@@ -83,14 +91,6 @@ public class FactJpaDao implements FactDaoLocal {
         }
     }
     
-    @Override
-    public Fact findDailyStatByIdSensorAndDateForUpdate(Long idSensor, Date date){
-        try{
-            return (Fact) em.createNamedQuery("findDailyStatByIdSensorAndDateForUpdate").setParameter("idSensor", idSensor).setParameter("date", date).getSingleResult();
-        }catch(NoResultException ex){
-            return null;
-        }
-    }
 
     @Override
     public List<Fact> findDailyStatByDate(Date date){
@@ -101,15 +101,6 @@ public class FactJpaDao implements FactDaoLocal {
     public Fact findCounterByIdSensor(Long idSensor){
         try{
             return (Fact) em.createNamedQuery("findCounterByIdSensor").setParameter("idSensor", idSensor).getSingleResult();
-        }catch(NoResultException ex){
-            return null;
-        }
-    }
-    
-    @Override
-    public Fact findCounterByIdSensorForUpdate(Long idSensor){
-        try{
-            return (Fact) em.createNamedQuery("findCounterByIdSensorForUpdate").setParameter("idSensor", idSensor).getSingleResult();
         }catch(NoResultException ex){
             return null;
         }
