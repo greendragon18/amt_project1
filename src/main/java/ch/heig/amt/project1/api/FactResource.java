@@ -5,12 +5,9 @@
  */
 package ch.heig.amt.project1.api;
 
-import ch.heig.amt.project1.dao.DayStatsDaoLocal;
-import ch.heig.amt.project1.dao.ObservationsCountDaoLocal;
-import ch.heig.amt.project1.dto.DayStatsDTO;
-import ch.heig.amt.project1.dto.ObservationsCountDTO;
-import ch.heig.amt.project1.entities.DayStats;
-import ch.heig.amt.project1.entities.ObservationsCount;
+import ch.heig.amt.project1.dao.FactDaoLocal;
+import ch.heig.amt.project1.dto.FactDTO;
+import ch.heig.amt.project1.entities.Fact;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,45 +34,50 @@ import javax.ws.rs.core.UriInfo;
 public class FactResource {
     
     @EJB
-    ObservationsCountDaoLocal observationsCountDao;
-    @EJB
-    DayStatsDaoLocal dayStatsDao;
+    FactDaoLocal factDao;
     
     @Context
     private UriInfo context;
     
     @GET
     @Produces("application/json")
-    public List<ObservationsCountDTO> getFacts() {
-        List<ObservationsCount> observationsCounts = observationsCountDao.findAll();
-        List<ObservationsCountDTO> observationsCountsDTO = new LinkedList<>();
+    public List<FactDTO> getFacts(@QueryParam("type") String type, @QueryParam("date") String day) {
+        if (type == null) type = "default";
         
-        for(ObservationsCount observationsCount : observationsCounts){
-            observationsCountsDTO.add(observationsCountDao.entityToDTO(observationsCount));
+        switch(type){
+            case "counter":
+                List<Fact> counterFacts = factDao.findAllCounter();
+                List<FactDTO> counterFactsDTO = new LinkedList<>();
+                
+                for(Fact observationsCount : counterFacts){
+                    counterFactsDTO.add(factDao.entityToDTO(observationsCount));
+                }
+                return counterFactsDTO;
+            case "dailyStat":
+                try {
+                    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                    Date date = df.parse(day);
+
+                    List<Fact> dailyStatFacts = factDao.findDailyStatByDate(date);
+                    List<FactDTO> dailyStatFactsDTO = new LinkedList<>();
+
+                    for(Fact dailyStatFact : dailyStatFacts){
+                        dailyStatFactsDTO.add(factDao.entityToDTO(dailyStatFact));
+                    }
+                    return dailyStatFactsDTO;
+                } catch (ParseException ex) {
+                    Logger.getLogger(FactResource.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            default:
+                List<Fact> facts = factDao.findAll();
+                List<FactDTO> factsDTO = new LinkedList<>();
+                
+                for(Fact fact : facts){
+                    factsDTO.add(factDao.entityToDTO(fact));
+                }
+                return factsDTO;  
         }
-        return observationsCountsDTO;
+
     }
-    
-    @GET @Path("dayStats")
-    @Produces("application/json")
-    public List<DayStatsDTO> getDayStats(@QueryParam("date") String day) {
-        try {
-            System.out.println("Day : "+day);
-            DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-            Date date = df.parse(day);
-            
-            List<DayStats> dayStatsList = dayStatsDao.findByDate(date);
-            List<DayStatsDTO> dayStatsDTOList = new LinkedList<>();
-            
-            for(DayStats dayStats : dayStatsList){
-                dayStatsDTOList.add(dayStatsDao.entityToDTO(dayStats));
-            }
-            return dayStatsDTOList;
-        } catch (ParseException ex) {
-            Logger.getLogger(FactResource.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-    //DateFormat df = new SimpleDateFormat("yy-MM-d");
     
 }

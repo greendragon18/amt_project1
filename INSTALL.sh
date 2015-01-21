@@ -10,9 +10,9 @@ JDBC_CONNECTION_POOL_NAME=${DB_NAME}_pull
 JDBC_JNDI_NAME=jdbc/${DB_NAME}
 
 # MAC OS X PATH
-GLASSFISH=~/GlassFish_Server/
+#GLASSFISH=~/GlassFish_Server/
 # LINUX PATH
-#GLASSFISH=~/glassfish-4.0/glassfish
+GLASSFISH=~/glassfish-4.1/glassfish
 ASADMIN=${GLASSFISH}/bin/asadmin
 
 # MySQL

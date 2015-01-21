@@ -5,8 +5,7 @@
  */
 package ch.heig.amt.project1.api;
 
-import ch.heig.amt.project1.business.ObservationsFlowDaysStatsProssessorLocal;
-import ch.heig.amt.project1.business.ObservationsFlowCountProcessorLocal;
+import ch.heig.amt.project1.business.ObservationFlowFactProcessorLocal;
 import ch.heig.amt.project1.dao.ObservationDaoLocal;
 import ch.heig.amt.project1.dao.SensorDaoLocal;
 import ch.heig.amt.project1.dto.ObservationDTO;
@@ -20,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.jws.WebService;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -35,16 +35,16 @@ import javax.ws.rs.core.UriInfo;
  * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
 @Path("sensors")
+@WebService
 @Stateless
 public class SensorResource {
-    @EJB
-    private ObservationsFlowCountProcessorLocal ObservationsFlowCountProcessor;
-    @EJB
-    private ObservationsFlowDaysStatsProssessorLocal ObservationsFlowDaysStatsProssessor;
+
     @EJB
     SensorDaoLocal sensorDao;
     @EJB
     ObservationDaoLocal observationDao;
+    @EJB
+    private ObservationFlowFactProcessorLocal observationFlowFactProcessor;
     
     
     @Context
@@ -96,8 +96,9 @@ public class SensorResource {
         try {
             Observation observation = observationDao.dtoToNewEntity(observationDTO, id);
             observationDao.create(observation);
-            ObservationsFlowCountProcessor.processObservation(observation);
-            ObservationsFlowDaysStatsProssessor.processObservation(observation);
+            observationFlowFactProcessor.processCounterFact(observation);
+            observationFlowFactProcessor.processDailyStatFact(observation);
+
             return observationDao.entityToDTO(observation);
         } catch (Exception ex) {
             Logger.getLogger(SensorResource.class.getName()).log(Level.SEVERE, null, ex);

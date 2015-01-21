@@ -15,6 +15,7 @@ public class ObservationDTO implements Serializable {
     private Long idObservation;
     private Double value;
     private Long timestamp;
+    private Long idSensor;
 
     public Long getIdObservation() {
         return idObservation;
@@ -38,6 +39,14 @@ public class ObservationDTO implements Serializable {
 
     public void setTimestamp(Long timestemp) {
         this.timestamp = timestemp;
+    }
+
+    public Long getIdSensor() {
+        return idSensor;
+    }
+
+    public void setIdSensor(Long idSensor) {
+        this.idSensor = idSensor;
     }
     
 }

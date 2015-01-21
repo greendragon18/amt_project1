@@ -6,8 +6,11 @@
 package ch.heig.amt.project1.entities;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import static javax.persistence.LockModeType.PESSIMISTIC_WRITE;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -19,20 +22,38 @@ import javax.persistence.PrimaryKeyJoinColumn;
 @Entity
 @NamedQueries({
     @NamedQuery(
-            name = "findObservationsCountByIdSensor",
-            query = "SELECT o FROM ObservationsCount o WHERE o.idSensor = :idSensor"
+            name = "findCounterByIdSensor",
+            query = "SELECT c FROM CounterFact c WHERE c.idSensor = :idSensor"
     ),
     @NamedQuery(
-            name = "findAllObservationsCount",
-            query = "SELECT o FROM ObservationsCount o"
+            name = "findCounterByIdSensorForUpdate",
+            query = "SELECT c FROM CounterFact c WHERE c.idSensor = :idSensor",
+            lockMode = PESSIMISTIC_WRITE
+    ),
+    @NamedQuery(
+            name = "findAllCounter",
+            query = "SELECT c FROM CounterFact c"
     )
 })
 @PrimaryKeyJoinColumn(name =  "ID_OBSERVATION_COUNT", referencedColumnName = "IDFACT")
-public class ObservationsCount extends Fact implements Serializable{
+public class CounterFact extends Fact implements Serializable{
     @Column(unique=true,  nullable = false)
     private Long idSensor;
     @Column(nullable = false) 
     private Long nbObervation;
+    
+    public CounterFact(){
+        super();
+        super.setType("counter");
+    }
+    
+    @Override
+    public Map<String, Object> getProperties() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("nbObervation", nbObervation);
+        properties.put("idSensor", idSensor);
+        return properties;
+    }
 
     public Long getIdSensor() {
         return idSensor;
@@ -49,7 +70,5 @@ public class ObservationsCount extends Fact implements Serializable{
     public void setNbObervation(Long nbObervation) {
         this.nbObervation = nbObervation;
     }
-    
-    
     
 }

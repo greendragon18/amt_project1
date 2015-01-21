@@ -5,16 +5,21 @@
  */
 package ch.heig.amt.project1.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  *
  * @author Butticaz Leal Nicolas & Piere-Alain Curty
  */
-public abstract class FactDTO implements Serializable{
+public class FactDTO implements Serializable{
     private Long idFact;
     private Boolean isPublic;
-    private Long fkOrganisation;
+    private Long idOrganisation;
+    private String type;
+    @JsonProperty("properties")
+    private Map<String, Object> properties;
 
     public Long getIdFact() {
         return idFact;
@@ -32,12 +37,27 @@ public abstract class FactDTO implements Serializable{
         this.isPublic = isPublic;
     }
 
-    public Long getFkOrganisation() {
-        return fkOrganisation;
+    public String getType() {
+        return type;
     }
 
-    public void setFkOrganisation(Long fkOrganisation) {
-        this.fkOrganisation = fkOrganisation;
+    public void setType(String type) {
+        this.type = type;
     }
-    
+
+    public Map<String, Object> getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Map<String, Object> properties) {
+        this.properties = properties;
+    }
+
+    public Long getIdOrganisation() {
+        return idOrganisation;
+    }
+
+    public void setIdOrganisation(Long fkOrganisation) {
+        this.idOrganisation = fkOrganisation;
+    }
 }

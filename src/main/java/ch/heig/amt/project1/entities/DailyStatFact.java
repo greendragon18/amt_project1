@@ -7,10 +7,14 @@ package ch.heig.amt.project1.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import static javax.persistence.LockModeType.PESSIMISTIC_WRITE;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,12 +26,17 @@ import javax.persistence.TemporalType;
 @Entity
 @NamedQueries({
     @NamedQuery(
-            name = "findDayStatsByIdSensorAndDate",
-            query = "SELECT d FROM DayStats d WHERE d.idSensor = :idSensor AND d.date = :date"
+            name = "findDailyStatByIdSensorAndDate",
+            query = "SELECT d FROM DailyStatFact d WHERE d.idSensor = :idSensor AND d.date = :date"
     ),
     @NamedQuery(
-            name = "findDayStatsByDate",
-            query = "SELECT d FROM DayStats d WHERE d.date = :date"
+            name = "findDailyStatByIdSensorAndDateForUpdate",
+            query = "SELECT d FROM DailyStatFact d WHERE d.idSensor = :idSensor AND d.date = :date",
+            lockMode = PESSIMISTIC_WRITE
+    ),
+    @NamedQuery(
+            name = "findDailyStatByDate",
+            query = "SELECT d FROM DailyStatFact d WHERE d.date = :date"
     ),
     @NamedQuery(
             name = "findObservationAvridgeBySensorAndDate",
@@ -35,7 +44,7 @@ import javax.persistence.TemporalType;
     )
 })
 @PrimaryKeyJoinColumn(name =  "ID_DAY_STATS", referencedColumnName = "IDFACT")
-public class DayStats extends Fact implements Serializable{
+public class DailyStatFact extends Fact implements Serializable{
     
     @Column(name="DAY_STATS_DATE", nullable = false)
     @Temporal(TemporalType.DATE)
@@ -52,6 +61,29 @@ public class DayStats extends Fact implements Serializable{
     private Long nbObservation;
     @Column(nullable = false)
     private Long idSensor;
+    @Column(unique=true, nullable = false)
+    private Long singlePersistCheck;
+    
+    public DailyStatFact(){
+        super();
+        super.setType("dailyStat");
+    }
+    
+    @Override
+    public Map<String, Object> getProperties() {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put("date", date);
+        properties.put("min", min);
+        properties.put("max", max);
+        properties.put("average", average);
+        properties.put("idSensor", idSensor);
+        return properties;
+    }
+    
+    @PrePersist
+    protected void onCreate() {
+        singlePersistCheck = (date.getTime() - date.getTime() % (24*60*60*1000) + idSensor);
+    }
 
     public Date getDate() {
         return date;
@@ -108,4 +140,14 @@ public class DayStats extends Fact implements Serializable{
     public void setNbObservation(Long nbObservation) {
         this.nbObservation = nbObservation;
     }
+
+    public Long getSinglePersistCheck() {
+        return singlePersistCheck;
+    }
+
+    public void setSinglePersistCheck(Long singlePersistCheck) {
+        this.singlePersistCheck = singlePersistCheck;
+    }
+    
+
 }

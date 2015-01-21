@@ -24,8 +24,6 @@ public class ObservationJpaDao implements ObservationDaoLocal {
     
     @EJB
     SensorDaoLocal sensorDao;
-    @EJB 
-    ObservationsCountDaoLocal observationsCountDao;
 
     @PersistenceContext
     EntityManager em;
@@ -63,6 +61,7 @@ public class ObservationJpaDao implements ObservationDaoLocal {
         observationDTO.setIdObservation(observation.getIdObservation());
         observationDTO.setValue(observation.getValue());
         observationDTO.setTimestamp(observation.getTimestamp().getTime());
+        observationDTO.setIdSensor(observation.getSensor().getIdSensor());
         
         return observationDTO;
     }
