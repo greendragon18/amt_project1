@@ -17,7 +17,6 @@ import javax.persistence.PersistenceContext;
 import java.util.logging.Logger;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.persistence.OptimisticLockException;
 
 /**
  *
